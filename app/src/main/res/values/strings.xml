@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">Android Project Chess20</string>
     <string name="undo_button">undo</string>
+    <string name="draw_game">draw</string>
+    <string name="resign_game">resign</string>
+    <string name="AI_button">AI</string>
+    <string name="a1">a1</string>
+    <string name="a2">a2</string>
+    <string name="a3">a3</string>
+    <string name="b3">b3</string>
+    <string name="b1">b1</string>
+    <string name="b2">b2</string>
 </resources>
