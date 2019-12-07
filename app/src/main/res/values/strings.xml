@@ -28,4 +28,20 @@
     <string name="h1">h1</string>
     <string name="h2">h2</string>
     <string name="h3">h3</string>
+    <string name="a4">a4</string>
+    <string name="b4">b4</string>
+    <string name="c4">c4</string>
+    <string name="d4">d4</string>
+    <string name="e4">e4</string>
+    <string name="f4">f4</string>
+    <string name="g4">g4</string>
+    <string name="h4">h4</string>
+    <string name="a5">a5</string>
+    <string name="b5">b5</string>
+    <string name="c5">c5</string>
+    <string name="d5">d5</string>
+    <string name="e5">e5</string>
+    <string name="f5">f5</string>
+    <string name="g5">g5</string>
+    <string name="h5">h5</string>
 </resources>
