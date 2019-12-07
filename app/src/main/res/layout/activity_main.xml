@@ -11,6 +11,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="70dp"
+        android:contentDescription="@string/h3"
         app:layout_constraintBottom_toTopOf="@+id/h2"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:color/holo_orange_dark" />
@@ -19,6 +20,7 @@
         android:id="@+id/f3"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/f3"
         app:layout_constraintBottom_toTopOf="@+id/f2"
         app:layout_constraintEnd_toStartOf="@+id/g3"
         app:srcCompat="@android:color/holo_orange_dark" />
@@ -27,6 +29,7 @@
         android:id="@+id/g3"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/g3"
         app:layout_constraintBottom_toTopOf="@+id/g2"
         app:layout_constraintEnd_toStartOf="@+id/h3"
         app:srcCompat="#FFC107" />
@@ -35,6 +38,7 @@
         android:id="@+id/c3"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/c3"
         app:layout_constraintBottom_toTopOf="@+id/c2"
         app:layout_constraintEnd_toStartOf="@+id/d3"
         app:srcCompat="@android:color/holo_orange_dark" />
@@ -43,6 +47,7 @@
         android:id="@+id/a3"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/a3"
         app:layout_constraintBottom_toTopOf="@+id/a2"
         app:layout_constraintEnd_toStartOf="@+id/b3"
         app:srcCompat="@android:color/holo_orange_dark" />
@@ -51,6 +56,7 @@
         android:id="@+id/d3"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/d3"
         app:layout_constraintBottom_toTopOf="@+id/d2"
         app:layout_constraintEnd_toStartOf="@+id/e3"
         app:srcCompat="@android:color/holo_orange_dark" />
@@ -59,6 +65,7 @@
         android:id="@+id/e3"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/e3"
         app:layout_constraintBottom_toTopOf="@+id/e2"
         app:layout_constraintEnd_toStartOf="@+id/f3"
         app:srcCompat="@android:color/holo_orange_dark" />
@@ -67,6 +74,7 @@
         android:id="@+id/b3"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/b3"
         app:layout_constraintBottom_toTopOf="@+id/b2"
         app:layout_constraintEnd_toStartOf="@+id/c3"
         app:srcCompat="#FFC107" />
@@ -75,6 +83,7 @@
         android:id="@+id/a2"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/a2"
         app:layout_constraintBottom_toTopOf="@+id/a1"
         app:layout_constraintEnd_toStartOf="@+id/b2"
         app:srcCompat="#FFC107" />
@@ -83,6 +92,7 @@
         android:id="@+id/g2"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/g2"
         app:layout_constraintBottom_toTopOf="@+id/g1"
         app:layout_constraintEnd_toStartOf="@+id/h2"
         app:srcCompat="#FFC107" />
@@ -91,6 +101,7 @@
         android:id="@+id/c2"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/c2"
         app:layout_constraintBottom_toTopOf="@+id/c1"
         app:layout_constraintEnd_toStartOf="@+id/d2"
         app:srcCompat="#FFC107" />
@@ -99,6 +110,7 @@
         android:id="@+id/f2"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/f2"
         app:layout_constraintBottom_toTopOf="@+id/f1"
         app:layout_constraintEnd_toStartOf="@+id/g2"
         app:srcCompat="@android:color/holo_orange_dark" />
@@ -107,6 +119,7 @@
         android:id="@+id/d2"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/d2"
         app:layout_constraintBottom_toTopOf="@+id/d1"
         app:layout_constraintEnd_toStartOf="@+id/e2"
         app:srcCompat="@android:color/holo_orange_dark" />
@@ -116,6 +129,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="70dp"
+        android:contentDescription="@string/h2"
         app:layout_constraintBottom_toTopOf="@+id/h1"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:color/holo_orange_dark" />
@@ -124,6 +138,7 @@
         android:id="@+id/e2"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/e2"
         app:layout_constraintBottom_toTopOf="@+id/e1"
         app:layout_constraintEnd_toStartOf="@+id/f2"
         app:srcCompat="#FFC107" />
@@ -132,6 +147,7 @@
         android:id="@+id/b2"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:contentDescription="@string/b2"
         app:layout_constraintBottom_toTopOf="@+id/b1"
         app:layout_constraintEnd_toStartOf="@+id/c2"
         app:srcCompat="@android:color/holo_orange_dark" />
@@ -140,66 +156,82 @@
         android:id="@+id/g1"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_marginBottom="187dp"
+        android:contentDescription="@string/g1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/h1"
-        app:srcCompat="#FFC107"
-        tools:layout_editor_absoluteY="509dp" />
+        app:srcCompat="#FFC107" />
 
     <ImageView
         android:id="@+id/f1"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_marginBottom="187dp"
+        android:contentDescription="@string/f1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/g1"
-        app:srcCompat="@android:color/holo_orange_dark"
-        tools:layout_editor_absoluteY="509dp" />
+        app:srcCompat="@android:color/holo_orange_dark" />
 
     <ImageView
         android:id="@+id/e1"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_marginBottom="187dp"
+        android:contentDescription="@string/e1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/f1"
-        app:srcCompat="#FFC107"
-        tools:layout_editor_absoluteY="509dp" />
+        app:srcCompat="#FFC107" />
 
     <ImageView
         android:id="@+id/a1"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_marginBottom="187dp"
+        android:contentDescription="@string/a1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/b1"
-        app:srcCompat="#FFC107"
-        tools:layout_editor_absoluteY="509dp" />
+        app:srcCompat="#FFC107" />
 
     <ImageView
         android:id="@+id/d1"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_marginBottom="187dp"
+        android:contentDescription="@string/d1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/e1"
-        app:srcCompat="@android:color/holo_orange_dark"
-        tools:layout_editor_absoluteY="509dp" />
+        app:srcCompat="@android:color/holo_orange_dark" />
 
     <ImageView
         android:id="@+id/b1"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_marginBottom="187dp"
+        android:contentDescription="@string/b1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/c1"
-        app:srcCompat="@android:color/holo_orange_dark"
-        tools:layout_editor_absoluteY="509dp" />
+        app:srcCompat="@android:color/holo_orange_dark" />
 
     <ImageView
         android:id="@+id/h1"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginEnd="70dp"
+        android:layout_marginBottom="187dp"
+        android:contentDescription="@string/h1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:color/holo_orange_dark"
-        tools:layout_editor_absoluteY="509dp" />
+        app:srcCompat="@android:color/holo_orange_dark" />
 
     <ImageView
         android:id="@+id/c1"
         android:layout_width="35dp"
         android:layout_height="35dp"
+        android:layout_marginBottom="187dp"
+        android:contentDescription="@string/c1"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/d1"
-        app:srcCompat="#FFC107"
-        tools:layout_editor_absoluteY="509dp" />
+        app:srcCompat="#FFC107" />
 
     <Button
         android:id="@+id/undo"

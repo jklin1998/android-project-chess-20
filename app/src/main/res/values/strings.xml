@@ -10,4 +10,22 @@
     <string name="b3">b3</string>
     <string name="b1">b1</string>
     <string name="b2">b2</string>
+    <string name="c1">c1</string>
+    <string name="c2">c2</string>
+    <string name="c3">c3</string>
+    <string name="d1">d1</string>
+    <string name="d2">d2</string>
+    <string name="d3">d3</string>
+    <string name="e1">e1</string>
+    <string name="e2">e2</string>
+    <string name="e3">e3</string>
+    <string name="f1">f1</string>
+    <string name="f2">f2</string>
+    <string name="f3">f3</string>
+    <string name="g1">g1</string>
+    <string name="g2">g2</string>
+    <string name="g3">g3</string>
+    <string name="h1">h1</string>
+    <string name="h2">h2</string>
+    <string name="h3">h3</string>
 </resources>
