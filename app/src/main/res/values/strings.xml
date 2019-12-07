@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Android Project Chess20</string>
+    <string name="undo_button">undo</string>
 </resources>
