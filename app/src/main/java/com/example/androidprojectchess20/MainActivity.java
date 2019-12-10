@@ -5,6 +5,7 @@
 package com.example.androidprojectchess20;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -177,8 +179,185 @@ public class MainActivity extends AppCompatActivity {
         ImageView nodeH6 = (ImageView)findViewById(R.id.h6);
         ImageView nodeH7 = (ImageView)findViewById(R.id.h7);
         ImageView nodeH8 = (ImageView)findViewById(R.id.h8);
-        System.out.println("Hi");
-        nodeA1.setImageResource(R.drawable.whiterook);
+
+        /* NODE MAP */
+        ImageView[][] nodeMap = new ImageView[8][8];
+        // ROW 8
+        nodeMap[0][0] = nodeA8;
+        nodeMap[0][1] = nodeB8;
+        nodeMap[0][2] = nodeC8;
+        nodeMap[0][3] = nodeD8;
+        nodeMap[0][4] = nodeE8;
+        nodeMap[0][5] = nodeF8;
+        nodeMap[0][6] = nodeG8;
+        nodeMap[0][7] = nodeH8;
+        // ROW 7
+        nodeMap[1][0] = nodeA7;
+        nodeMap[1][1] = nodeB7;
+        nodeMap[1][2] = nodeC7;
+        nodeMap[1][3] = nodeD7;
+        nodeMap[1][4] = nodeE7;
+        nodeMap[1][5] = nodeF7;
+        nodeMap[1][6] = nodeG7;
+        nodeMap[1][7] = nodeH7;
+        // ROW 6
+        nodeMap[2][0] = nodeA6;
+        nodeMap[2][1] = nodeB6;
+        nodeMap[2][2] = nodeC6;
+        nodeMap[2][3] = nodeD6;
+        nodeMap[2][4] = nodeE6;
+        nodeMap[2][5] = nodeF6;
+        nodeMap[2][6] = nodeG6;
+        nodeMap[2][7] = nodeH6;
+        // ROW 5
+        nodeMap[3][0] = nodeA5;
+        nodeMap[3][1] = nodeB5;
+        nodeMap[3][2] = nodeC5;
+        nodeMap[3][3] = nodeD5;
+        nodeMap[3][4] = nodeE5;
+        nodeMap[3][5] = nodeF5;
+        nodeMap[3][6] = nodeG5;
+        nodeMap[3][7] = nodeH5;
+        // ROW 4
+        nodeMap[4][0] = nodeA4;
+        nodeMap[4][1] = nodeB4;
+        nodeMap[4][2] = nodeC4;
+        nodeMap[4][3] = nodeD4;
+        nodeMap[4][4] = nodeE4;
+        nodeMap[4][5] = nodeF4;
+        nodeMap[4][6] = nodeG4;
+        nodeMap[4][7] = nodeH4;
+        // ROW 3
+        nodeMap[5][0] = nodeA3;
+        nodeMap[5][1] = nodeB3;
+        nodeMap[5][2] = nodeC3;
+        nodeMap[5][3] = nodeD3;
+        nodeMap[5][4] = nodeE3;
+        nodeMap[5][5] = nodeF3;
+        nodeMap[5][6] = nodeG3;
+        nodeMap[5][7] = nodeH3;
+        // ROW 2
+        nodeMap[6][0] = nodeA2;
+        nodeMap[6][1] = nodeB2;
+        nodeMap[6][2] = nodeC2;
+        nodeMap[6][3] = nodeD2;
+        nodeMap[6][4] = nodeE2;
+        nodeMap[6][5] = nodeF2;
+        nodeMap[6][6] = nodeG2;
+        nodeMap[6][7] = nodeH2;
+        // ROW 1
+        nodeMap[7][0] = nodeA1;
+        nodeMap[7][1] = nodeB1;
+        nodeMap[7][2] = nodeC1;
+        nodeMap[7][3] = nodeD1;
+        nodeMap[7][4] = nodeE1;
+        nodeMap[7][5] = nodeF1;
+        nodeMap[7][6] = nodeG1;
+        nodeMap[7][7] = nodeH1;
+
+        for(int i = 0; i < 8; i++)
+        {
+            for(int j = 0; j < 8; j++)
+            {
+                if(chessboard[i][j].equals("bR")) // BLACK PIECES
+                {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.blackrook_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.blackrook_lightorange);
+                    }
+                } else if(chessboard[i][j].equals("bK"))
+                {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.blackking_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.blackking_lightorange);
+                    }
+                } else if(chessboard[i][j].equals("bB")) {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.blackbishop_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.blackbishop_lightorange);
+                    }
+                } else if(chessboard[i][j].equals("bN")) {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.blackknight_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.blackknight_lightorange);
+                    }
+                } else if(chessboard[i][j].equals("bQ")) {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.blackqueen_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.blackqueen_lightorange);
+                    }
+                } else if(chessboard[i][j].equals("bp")) {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.blackpawn_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.blackpawn_lightorange);
+                    }
+                } else if(chessboard[i][j].equals("wR")) // WHITE PIECES
+                {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.whiterook_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.whiterook_lightorange);
+                    }
+                } else if(chessboard[i][j].equals("wK"))
+                {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.whiteking_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.whiteking_lightorange);
+                    }
+                } else if(chessboard[i][j].equals("wB")) {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.whitebishop_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.whitebishop_lightorange);
+                    }
+                } else if(chessboard[i][j].equals("wN")) {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.whiteknight_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.whiteknight_lightorange);
+                    }
+                } else if(chessboard[i][j].equals("wQ")) {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.whitequeen_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.whitequeen_lightorange);
+                    }
+                } else if(chessboard[i][j].equals("wp")) {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.whitepawn_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.whitepawn_lightorange);
+                    }
+                } else {
+                    if((i+j) % 2 == 0)
+                    {
+                        nodeMap[i][j].setImageResource(R.drawable.blank_darkorange);
+                    } else {
+                        nodeMap[i][j].setImageResource(R.drawable.blank_lightorange);
+                    }
+                }
+            }
+        }
+        //nodeA1.setImageResource(R.drawable.whiterook);
     }
 
     /**
@@ -1333,6 +1512,7 @@ public class MainActivity extends AppCompatActivity {
         if(x1Node == -1 || x2Node == -1 || y1Node == -1 || y2Node == -1)
         {
             System.out.println("Illegal move, try again");
+            showErrorMessage("Illegal move, try again");
             isIllegal = true;
             return;
         }
@@ -1347,6 +1527,7 @@ public class MainActivity extends AppCompatActivity {
                 if(src.charAt(0) != 'w')
                 {
                     System.out.println("Illegal move, try again");
+                    showErrorMessage("Illegal move, try again");
                     isIllegal = true;
                     return;
                 }
@@ -1355,12 +1536,14 @@ public class MainActivity extends AppCompatActivity {
                 if(src.charAt(0) != 'b')
                 {
                     System.out.println("Illegal move, try again");
+                    showErrorMessage("Illegal move, try again");
                     isIllegal = true;
                     return;
                 }
             }
         } catch (Exception e) {
             System.out.println("Illegal move, try again");
+            showErrorMessage("Illegal move, try again");
             isIllegal = true;
             return;
         }
@@ -1378,6 +1561,7 @@ public class MainActivity extends AppCompatActivity {
             chessboard[y1Node][x1Node] = "  ";
         } else {
             System.out.println("Illegal move, try again");
+            showErrorMessage("Illegal move, try again");
             isIllegal = true;
             return;
         }
@@ -1465,8 +1649,10 @@ public class MainActivity extends AppCompatActivity {
                 if(phase.equals("White"))
                 {
                     System.out.println("Black wins");
+                    showErrorMessage("Game over: Black wins");
                 } else {
                     System.out.println("White wins");
+                    showErrorMessage("Game over: White wins");
                 }
                 return;
             }
@@ -1481,6 +1667,7 @@ public class MainActivity extends AppCompatActivity {
             if(commandArrList.size() < 2)
             {
                 System.out.println("\nIllegal move, try again");
+                showErrorMessage("Illegal move, try again");
                 break;
             }
             String arg2 = commandArrList.get(1);
@@ -1521,12 +1708,25 @@ public class MainActivity extends AppCompatActivity {
                     if(phase.equals("White"))
                     {
                         System.out.println("Black wins");
+                        showErrorMessage("Game over: Black wins");
                     } else {
                         System.out.println("White wins");
+                        showErrorMessage("Game over: White wins");
                     }
                     return;
                 }
             }
+        }
+        if(!isIllegal)
+        {
+            showErrorMessage(phase+"'s turn");
+            playback = playback + command + "\n";
+            System.out.println("Playback: "+playback);
+        }
+        if(isIllegal)
+        {
+            EditText sourceText = (EditText)findViewById(R.id.sourceInput);
+            sourceText.setText(phase+": ?? to ??");
         }
         /*
         if(!gameEnd)
@@ -1547,11 +1747,12 @@ public class MainActivity extends AppCompatActivity {
         if(firstInput.equals("")) {
             firstInput = input;
             secondInput = "";
-            sourceText.setText(firstInput +" to ??");
+            sourceText.setText(phase+": "+firstInput +" to ??");
         } else {
             secondInput = input;
-            sourceText.setText(firstInput + " to " + secondInput);
-            totalInput = firstInput.toLowerCase() + " to " + secondInput.toLowerCase();
+            sourceText.setText(phase+": "+firstInput + " to " + secondInput);
+            totalInput = firstInput.toLowerCase() + " " + secondInput.toLowerCase();
+            System.out.println(totalInput);
             playerLoop();
             firstInput = "";
             secondInput = "";
@@ -1569,13 +1770,13 @@ public class MainActivity extends AppCompatActivity {
         playerLoop();
         */
         final EditText sourceText = (EditText)findViewById(R.id.sourceInput);
-        sourceText.setText("?? to ??");
+        sourceText.setText("White: ?? to ??");
         Button drawButton = (Button)findViewById(R.id.draw_button);
         drawButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
-                sourceText.setText("Hi");
+                sourceText.setText("In progress");
             }
         });
 
@@ -1584,18 +1785,626 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                sourceText.setText("eat a dic");
+                sourceText.setText("In progress");
+            }
+        });
+
+        Button aiButton = (Button)findViewById(R.id.button4);
+        aiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                sourceText.setText("In progress");
+            }
+        });
+
+        Button resignButton = (Button)findViewById(R.id.resign);
+        resignButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                sourceText.setText(phase+": resign");
+                totalInput = "resign";
+                System.out.println(totalInput);
+                playerLoop();
             }
         });
 
         ImageView nodeA1 = (ImageView)findViewById(R.id.a1);
-        nodeA1.setOnClickListener(new View.OnClickListener() {
+        ImageView nodeA2 = (ImageView)findViewById(R.id.a2);
+        ImageView nodeA3 = (ImageView)findViewById(R.id.a3);
+        ImageView nodeA4 = (ImageView)findViewById(R.id.a4);
+        ImageView nodeA5 = (ImageView)findViewById(R.id.a5);
+        ImageView nodeA6 = (ImageView)findViewById(R.id.a6);
+        ImageView nodeA7 = (ImageView)findViewById(R.id.a7);
+        ImageView nodeA8 = (ImageView)findViewById(R.id.a8);
+        ImageView nodeB1 = (ImageView)findViewById(R.id.b1);
+        ImageView nodeB2 = (ImageView)findViewById(R.id.b2);
+        ImageView nodeB3 = (ImageView)findViewById(R.id.b3);
+        ImageView nodeB4 = (ImageView)findViewById(R.id.b4);
+        ImageView nodeB5 = (ImageView)findViewById(R.id.b5);
+        ImageView nodeB6 = (ImageView)findViewById(R.id.b6);
+        ImageView nodeB7 = (ImageView)findViewById(R.id.b7);
+        ImageView nodeB8 = (ImageView)findViewById(R.id.b8);
+        ImageView nodeC1 = (ImageView)findViewById(R.id.c1);
+        ImageView nodeC2 = (ImageView)findViewById(R.id.c2);
+        ImageView nodeC3 = (ImageView)findViewById(R.id.c3);
+        ImageView nodeC4 = (ImageView)findViewById(R.id.c4);
+        ImageView nodeC5 = (ImageView)findViewById(R.id.c5);
+        ImageView nodeC6 = (ImageView)findViewById(R.id.c6);
+        ImageView nodeC7 = (ImageView)findViewById(R.id.c7);
+        ImageView nodeC8 = (ImageView)findViewById(R.id.c8);
+        ImageView nodeD1 = (ImageView)findViewById(R.id.d1);
+        ImageView nodeD2 = (ImageView)findViewById(R.id.d2);
+        ImageView nodeD3 = (ImageView)findViewById(R.id.d3);
+        ImageView nodeD4 = (ImageView)findViewById(R.id.d4);
+        ImageView nodeD5 = (ImageView)findViewById(R.id.d5);
+        ImageView nodeD6 = (ImageView)findViewById(R.id.d6);
+        ImageView nodeD7 = (ImageView)findViewById(R.id.d7);
+        ImageView nodeD8 = (ImageView)findViewById(R.id.d8);
+        ImageView nodeE1 = (ImageView)findViewById(R.id.e1);
+        ImageView nodeE2 = (ImageView)findViewById(R.id.e2);
+        ImageView nodeE3 = (ImageView)findViewById(R.id.e3);
+        ImageView nodeE4 = (ImageView)findViewById(R.id.e4);
+        ImageView nodeE5 = (ImageView)findViewById(R.id.e5);
+        ImageView nodeE6 = (ImageView)findViewById(R.id.e6);
+        ImageView nodeE7 = (ImageView)findViewById(R.id.e7);
+        ImageView nodeE8 = (ImageView)findViewById(R.id.e8);
+        ImageView nodeF1 = (ImageView)findViewById(R.id.f1);
+        ImageView nodeF2 = (ImageView)findViewById(R.id.f2);
+        ImageView nodeF3 = (ImageView)findViewById(R.id.f3);
+        ImageView nodeF4 = (ImageView)findViewById(R.id.f4);
+        ImageView nodeF5 = (ImageView)findViewById(R.id.f5);
+        ImageView nodeF6 = (ImageView)findViewById(R.id.f6);
+        ImageView nodeF7 = (ImageView)findViewById(R.id.f7);
+        ImageView nodeF8 = (ImageView)findViewById(R.id.f8);
+        ImageView nodeG1 = (ImageView)findViewById(R.id.g1);
+        ImageView nodeG2 = (ImageView)findViewById(R.id.g2);
+        ImageView nodeG3 = (ImageView)findViewById(R.id.g3);
+        ImageView nodeG4 = (ImageView)findViewById(R.id.g4);
+        ImageView nodeG5 = (ImageView)findViewById(R.id.g5);
+        ImageView nodeG6 = (ImageView)findViewById(R.id.g6);
+        ImageView nodeG7 = (ImageView)findViewById(R.id.g7);
+        ImageView nodeG8 = (ImageView)findViewById(R.id.g8);
+        ImageView nodeH1 = (ImageView)findViewById(R.id.h1);
+        ImageView nodeH2 = (ImageView)findViewById(R.id.h2);
+        ImageView nodeH3 = (ImageView)findViewById(R.id.h3);
+        ImageView nodeH4 = (ImageView)findViewById(R.id.h4);
+        ImageView nodeH5 = (ImageView)findViewById(R.id.h5);
+        ImageView nodeH6 = (ImageView)findViewById(R.id.h6);
+        ImageView nodeH7 = (ImageView)findViewById(R.id.h7);
+        ImageView nodeH8 = (ImageView)findViewById(R.id.h8);
+
+        nodeA1.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View view)
             {
+
                 chooseMove("A1");
             }
         });
+        nodeA2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+                chooseMove("A2");
+            }
+        });
+        nodeA3.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+                chooseMove("A3");
+            }
+        });
+        nodeA4.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+                chooseMove("A4");
+            }
+        });
+        nodeA5.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+                chooseMove("A5");
+            }
+        });
+        nodeA6.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+                chooseMove("A6");
+            }
+        });
+        nodeA7.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+                chooseMove("A7");
+            }
+        });
+        nodeA8.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+                chooseMove("A8");
+            }
+        });
+        nodeB1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("B1");
+            }
+        });
+        nodeB2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("B2");
+            }
+        });
+        nodeB3.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("B3");
+            }
+        });
+        nodeB4.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("B4");
+            }
+        });
+        nodeB5.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("B5");
+            }
+        });
+        nodeB6.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("B6");
+            }
+        });
+        nodeB7.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("B7");
+            }
+        });
+        nodeB8.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("B8");
+            }
+        });
+        nodeC1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("C1");
+            }
+        });
+        nodeC2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("C2");
+            }
+        });
+        nodeC3.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("C3");
+            }
+        });
+        nodeC4.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("C4");
+            }
+        });
+        nodeC5.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("C5");
+            }
+        });
+        nodeC6.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("C6");
+            }
+        });
+        nodeC7.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("C7");
+            }
+        });
+        nodeC8.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("C8");
+            }
+        });
+        nodeD1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("D1");
+            }
+        });
+        nodeD2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("D2");
+            }
+        });
+        nodeD3.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("D3");
+            }
+        });
+        nodeD4.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("D4");
+            }
+        });
+        nodeD5.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("D5");
+            }
+        });
+        nodeD6.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("D6");
+            }
+        });
+        nodeD7.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("D7");
+            }
+        });
+        nodeD8.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("D8");
+            }
+        });
+        nodeE1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("E1");
+            }
+        });
+        nodeE2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("E2");
+            }
+        });
+        nodeE3.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("E3");
+            }
+        });
+        nodeE4.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("E4");
+            }
+        });
+        nodeE5.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("E5");
+            }
+        });
+        nodeE6.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("E6");
+            }
+        });
+        nodeE7.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("E7");
+            }
+        });
+        nodeE8.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("E8");
+            }
+        });
+        nodeF1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("F1");
+            }
+        });
+        nodeF2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("F2");
+            }
+        });
+        nodeF3.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("F3");
+            }
+        });
+        nodeF4.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("F4");
+            }
+        });
+        nodeF5.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("F5");
+            }
+        });
+        nodeF6.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("F6");
+            }
+        });
+        nodeF7.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("F7");
+            }
+        });
+        nodeF8.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("F8");
+            }
+        });
+        nodeG1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("G1");
+            }
+        });
+        nodeG2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("G2");
+            }
+        });
+        nodeG3.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("G3");
+            }
+        });
+        nodeG4.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("G4");
+            }
+        });
+        nodeG5.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("G5");
+            }
+        });
+        nodeG6.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("G6");
+            }
+        });
+        nodeG7.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("G7");
+            }
+        });
+        nodeG8.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("G8");
+            }
+        });
+        nodeH1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("H1");
+            }
+        });
+        nodeH2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("H2");
+            }
+        });
+        nodeH3.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("H3");
+            }
+        });
+        nodeH4.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("H4");
+            }
+        });
+        nodeH5.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("H5");
+            }
+        });
+        nodeH6.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("H6");
+            }
+        });
+        nodeH7.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("H7");
+            }
+        });
+        nodeH8.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                chooseMove("H8");
+            }
+        });
+    }
+
+    public void showErrorMessage(String input)
+    {
+        Context context = getApplicationContext();
+        CharSequence text = input;
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 
     public void playermove(){}
