@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
@@ -32,11 +33,15 @@ public class MainActivity extends AppCompatActivity {
     PORTED CODE
      */
     public String[][] chessboard = new String[8][8];
+    public String[][] backupChessboard = new String[8][8];
     public String phase = "White";
     public int[] castleMoves = new int[6];
     public boolean isDraw = false;
     public boolean gameEnd = false;
     public boolean isIllegal = false;
+    public boolean gameOngoing = false;
+    public boolean undoUsed = true;
+    public boolean kingInCheck = false;
 
     /**
      * This method resets the entire chessboard and its pieces to their original positions.
@@ -110,6 +115,34 @@ public class MainActivity extends AppCompatActivity {
 //        chessboard[6][5] = "bQ";
 //        chessboard[6][6] = "bQ";
 //        chessboard[7][7] = "wK";
+    }
+
+    /**
+     * This method simply creates a backup copy of the chessboard to be used in other test cases, such as undoing a move and failing a move due to a check.
+     */
+    public void copyChessboard()
+    {
+        for(int i = 0; i < 8; i++)
+        {
+            for(int j = 0; j < 8; j++)
+            {
+                backupChessboard[i][j] = chessboard[i][j];
+            }
+        }
+    }
+
+    /**
+     * This method reverts the main chessboard to a backup copy of the chessboard.
+     */
+    public void revertChessboard()
+    {
+        for(int i = 0; i < 8; i++)
+        {
+            for(int j = 0; j < 8; j++)
+            {
+                chessboard[i][j] = backupChessboard[i][j];
+            }
+        }
     }
 
     /**
@@ -890,6 +923,10 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if(src.charAt(1) == 'K') // BLACK & WHITE KING
         {
+            if(chessboard[y2Node][x2Node].charAt(0) == chessboard[y1Node][x1Node].charAt(0))
+            {
+                return false;
+            }
             if((x1Node - x2Node) < 2 && (x1Node - x2Node) > -2 && (y1Node - y2Node) < 2 && (y1Node - y2Node) > -2)
             {
 
@@ -902,6 +939,7 @@ public class MainActivity extends AppCompatActivity {
                         {
                             if(checkKing(i,7,"White"))
                             {
+                                kingInCheck = true;
                                 return false;
                             }
                         }
@@ -923,6 +961,7 @@ public class MainActivity extends AppCompatActivity {
                         {
                             if(checkKing(i,7,"White"))
                             {
+                                kingInCheck = true;
                                 return false;
                             }
                         }
@@ -989,6 +1028,7 @@ public class MainActivity extends AppCompatActivity {
             }
             if(checkKing(x2Node,y2Node,phase))
             {
+                kingInCheck = true;
                 return false;
             }
         }
@@ -1394,6 +1434,8 @@ public class MainActivity extends AppCompatActivity {
      */
     public void makeYourMove(String arg1, String arg2)
     {
+        copyChessboard();
+        undoUsed = true;
         String kingPiece = "";
         if(phase.equals("White"))
         {
@@ -1566,7 +1608,12 @@ public class MainActivity extends AppCompatActivity {
             chessboard[y1Node][x1Node] = "  ";
         } else {
             System.out.println("Illegal move, try again");
-            showErrorMessage("Illegal move, try again");
+            if(kingInCheck)
+            {
+                showErrorMessage("Illegal move, King is still in check");
+            } else {
+                showErrorMessage("Illegal move, try again");
+            }
             isIllegal = true;
             return;
         }
@@ -1621,12 +1668,70 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         System.out.println();
+        if(checkKing(xPos,yPos,phase))
+        {
+            revertChessboard();
+            isIllegal = true;
+            System.out.println("Illegal move, try again");
+            showErrorMessage("Illegal move, King is still in check");
+            printChessboard();
+            return;
+        }
         printChessboard();
+        /*
+        CHECK FOR OPPONENT'S CHECK
+         */
+        String tempPhase = "";
+        String tempKing = "";
+        int tempX = 0;
+        int tempY = 0;
+        if(phase.equals("Black"))
+        {
+            tempPhase = "White";
+            tempKing = "wK";
+        } else {
+            tempPhase = "Black";
+            tempKing = "bK";
+        }
+        for(int i = 0; i < 8; i++)
+        {
+            for(int j = 0; j < 8; j++)
+            {
+                if(chessboard[i][j].equals(tempKing))
+                {
+                    tempX = j;
+                    tempY = i;
+                }
+            }
+        }
+        if(checkKing(tempX,tempY,tempPhase))
+        {
+            System.out.println("Check");
+            AlertDialog restart = new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("WARNING!")
+                    .setMessage(tempPhase+" is in Check")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .show();
+        } else {
+            if(isStalemate(tempPhase))
+            {
+                System.out.println("Stalemate");
+                System.out.println("draw");
+                return;
+            }
+        }
         return;
     }
 
     public void playerLoop()
     {
+        gameOngoing = true;
+        kingInCheck = false;
         System.out.print(phase+"'s move: ");
         String command = totalInput;
         String[] temp = command.split("\n");
@@ -1649,6 +1754,26 @@ public class MainActivity extends AppCompatActivity {
         }
         while(commandArrList.size() > 0)
         {
+            if(commandArrList.get(0).equals("undo") && !undoUsed)
+            {
+                revertChessboard();
+                printChessboard();
+                firstInput = "";
+                secondInput = "";
+                if(phase.equals("White"))
+                {
+                    phase = "Black";
+                    showErrorMessage(phase+" would like to redo their move");
+                } else {
+                    phase = "White";
+                    showErrorMessage(phase+" would like to redo their move");
+                }
+                EditText sourceText = (EditText)findViewById(R.id.sourceInput);
+                sourceText.setText(phase+": ?? to ??");
+                undoUsed = true;
+                playback = playback + "undo\n";
+                return;
+            }
             if(commandArrList.get(0).equals("resign"))
             {
                 if(phase.equals("White"))
@@ -1735,6 +1860,7 @@ public class MainActivity extends AppCompatActivity {
             showErrorMessage(phase+"'s turn");
             playback = playback + command + "\n";
             System.out.println("Playback: "+playback);
+            undoUsed = false;
         }
         if(isIllegal)
         {
@@ -1782,6 +1908,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         resetChessboard();
+        copyChessboard();
         printChessboard();
         /*
         printChessboard();
@@ -1803,7 +1930,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                sourceText.setText("In progress");
+                if(!gameOngoing)
+                {
+                    System.out.println("Illegal move, try again");
+                    showErrorMessage("Cannot undo on turn 1!");
+                    return;
+                }
+                if(undoUsed)
+                {
+                    System.out.println("Illegal move, try again");
+                    showErrorMessage("Cannot undo further!");
+                } else {
+                    totalInput = "undo";
+                    playerLoop();
+                }
             }
         });
 
@@ -1812,7 +1952,62 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                sourceText.setText("In progress");
+                String[] letters = new String[8];
+                letters[0] = "A";
+                letters[1] = "B";
+                letters[2] = "C";
+                letters[3] = "D";
+                letters[4] = "E";
+                letters[5] = "F";
+                letters[6] = "G";
+                letters[7] = "H";
+                String[] numbers = new String[8];
+                numbers[0] = "8";
+                numbers[1] = "7";
+                numbers[2] = "6";
+                numbers[3] = "5";
+                numbers[4] = "4";
+                numbers[5] = "3";
+                numbers[6] = "2";
+                numbers[7] = "1";
+                char tempChar = 'a';
+                if(phase.equals("Black"))
+                {
+                    tempChar = 'b';
+                } else {
+                    tempChar = 'w';
+                }
+                ArrayList<String> phasePieces = new ArrayList<String>();
+                for(int i = 0; i < 8; i++)
+                {
+                    for(int j = 0; j < 8; j++)
+                    {
+                        if(chessboard[i][j].charAt(0) == tempChar)
+                        {
+                            phasePieces.add(chessboard[i][j]);
+                        }
+                    }
+                }
+
+                do {
+                    String randomPiece = phasePieces.get((int)(Math.random()*phasePieces.size()));
+                    String startPos = "";
+                    for(int i = 0; i < 8; i++)
+                    {
+                        for(int j = 0; j < 8; j++)
+                        {
+                            if(chessboard[i][j].equals(randomPiece))
+                            {
+                                startPos = letters[i]+numbers[j];
+                            }
+                        }
+                    }
+                    firstInput = startPos;
+                    secondInput = letters[(int)(Math.random()*8)]+numbers[(int)(Math.random()*8)];
+                    totalInput = firstInput + " " + secondInput;
+                    System.out.println(totalInput);
+                    playerLoop();
+                } while(isIllegal);
             }
         });
 
@@ -1821,10 +2016,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                sourceText.setText(phase+": resign");
-                totalInput = "resign";
-                System.out.println(totalInput);
-                playerLoop();
+                if(gameEnd)
+                {
+                    showErrorMessage("Game is not in session. Please restart the game.");
+                } else {
+                    sourceText.setText(phase+": resign");
+                    totalInput = "resign";
+                    System.out.println(totalInput);
+                    playerLoop();
+                }
             }
         });
 
@@ -1833,22 +2033,28 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                AlertDialog restart = new AlertDialog.Builder(MainActivity.this)
-                        .setTitle("Restart Game")
-                        .setMessage("Are you sure you want to restart the game?")
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                resetChessboard();
-                                playback = "";
-                                printChessboard();
-                                sourceText.setText("White: ?? to ??");
-                                phase = "White";
-
-                            }
-                        })
-                        .setNegativeButton(android.R.string.no, null)
-                        .show();
+                if(gameOngoing)
+                {
+                    AlertDialog restart = new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Restart Game")
+                            .setMessage("Are you sure you want to restart the game?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    resetChessboard();
+                                    playback = "";
+                                    printChessboard();
+                                    sourceText.setText("White: ?? to ??");
+                                    phase = "White";
+                                    gameOngoing = false;
+                                    gameEnd = false;
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .show();
+                } else {
+                    showErrorMessage("You haven't started a game yet!");
+                }
             }
         });
 
@@ -2447,6 +2653,12 @@ public class MainActivity extends AppCompatActivity {
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
+    }
+
+    public void openRecordActivity()
+    {
+        Intent intent = new Intent(this, RecordActivity.class);
+        startActivity(intent);
     }
 }
 
