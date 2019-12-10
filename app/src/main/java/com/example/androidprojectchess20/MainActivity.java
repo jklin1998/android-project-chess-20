@@ -3,9 +3,12 @@
  * @version 1.0
  */
 package com.example.androidprojectchess20;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
@@ -441,7 +444,7 @@ public class MainActivity extends AppCompatActivity {
      * @param y1Node y-coordinate of the first point
      * @param x2Node x-coordinate of the second point
      * @param y2Node y-coordinate of the second point
-     * @return Returns true or false, whether a move is considered level or not.
+     * @return Returns true or false, whether a move is considered legal or not.
      */
     public boolean checkLegality(int x1Node, int y1Node, int x2Node, int y2Node)
     {
@@ -711,7 +714,7 @@ public class MainActivity extends AppCompatActivity {
                 temp12 = x1Node;
                 mode = 1;
             }
-            if(y1Node < x2Node)
+            if(y1Node < y2Node)
             {
                 temp21 = y1Node;
                 temp22 = y2Node;
@@ -1457,8 +1460,10 @@ public class MainActivity extends AppCompatActivity {
             if(phase.equals("White"))
             {
                 System.out.println("Black wins");
+                gameEnd = true;
             } else {
                 System.out.println("White wins");
+                gameEnd = true;
             }
             return;
         }
@@ -1650,10 +1655,14 @@ public class MainActivity extends AppCompatActivity {
                 {
                     System.out.println("Black wins");
                     showErrorMessage("Game over: Black wins");
+                    gameEnd = true;
                 } else {
                     System.out.println("White wins");
                     showErrorMessage("Game over: White wins");
+                    gameEnd = true;
                 }
+                playback = playback + command + "\n";
+                System.out.println("Playback: "+playback);
                 return;
             }
             isIllegal = false;
@@ -1709,10 +1718,14 @@ public class MainActivity extends AppCompatActivity {
                     {
                         System.out.println("Black wins");
                         showErrorMessage("Game over: Black wins");
+                        gameEnd = true;
                     } else {
                         System.out.println("White wins");
                         showErrorMessage("Game over: White wins");
+                        gameEnd = true;
                     }
+                    playback = playback + command + "\n";
+                    System.out.println("Playback: "+playback);
                     return;
                 }
             }
@@ -1743,19 +1756,24 @@ public class MainActivity extends AppCompatActivity {
 
     public void chooseMove(String input)
     {
-        EditText sourceText = (EditText)findViewById(R.id.sourceInput);
-        if(firstInput.equals("")) {
-            firstInput = input;
-            secondInput = "";
-            sourceText.setText(phase+": "+firstInput +" to ??");
+        if(gameEnd)
+        {
+            showErrorMessage("Game is not in session. Please restart the game.");
         } else {
-            secondInput = input;
-            sourceText.setText(phase+": "+firstInput + " to " + secondInput);
-            totalInput = firstInput.toLowerCase() + " " + secondInput.toLowerCase();
-            System.out.println(totalInput);
-            playerLoop();
-            firstInput = "";
-            secondInput = "";
+            EditText sourceText = (EditText)findViewById(R.id.sourceInput);
+            if(firstInput.equals("")) {
+                firstInput = input;
+                secondInput = "";
+                sourceText.setText(phase+": "+firstInput +" to ??");
+            } else {
+                secondInput = input;
+                sourceText.setText(phase+": "+firstInput + " to " + secondInput);
+                totalInput = firstInput.toLowerCase() + " " + secondInput.toLowerCase();
+                System.out.println(totalInput);
+                playerLoop();
+                firstInput = "";
+                secondInput = "";
+            }
         }
     }
 
@@ -1807,6 +1825,30 @@ public class MainActivity extends AppCompatActivity {
                 totalInput = "resign";
                 System.out.println(totalInput);
                 playerLoop();
+            }
+        });
+
+        Button restartButton = (Button)findViewById(R.id.restart_button);
+        restartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                AlertDialog restart = new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("Restart Game")
+                        .setMessage("Are you sure you want to restart the game?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                resetChessboard();
+                                playback = "";
+                                printChessboard();
+                                sourceText.setText("White: ?? to ??");
+                                phase = "White";
+
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, null)
+                        .show();
             }
         });
 
@@ -2406,26 +2448,5 @@ public class MainActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
     }
-
-    public void playermove(){}
-
-    public void undo(android.view.View temp){
-        //mStartText.setText("Hi");
-    }
-
-    public void draw(android.view.View temp){
-        System.out.println("Draw My Life");
-    }
-
-    public void resign(){}
-
-    public void AImove(){}
-
-    public void resetboard(){}
-
-    public void chooseGame(){}
-
-
-
 }
 
