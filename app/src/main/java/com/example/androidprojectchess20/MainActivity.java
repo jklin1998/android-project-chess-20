@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Timer;
@@ -58,6 +59,14 @@ public class MainActivity extends AppCompatActivity {
     public static String feed = "";
     public static int turnCount = 0;
     Scanner sc;
+
+    /*
+    SAVE REPLAYS
+     */
+    public int checkReplay = 0;
+    public long timeReplay = 0;
+    public String saveReplay = "";
+    ArrayList<Playback> recordList = new ArrayList<Playback>();
 
     /**
      * This method is responsible for playing past games.
@@ -127,26 +136,73 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void finalSaveReplay()
+    {
+        Playback pl = new Playback(saveReplay,timeReplay,playback);
+        recordList.clear();
+        try (ObjectInputStream replayinput = new ObjectInputStream(new FileInputStream(MainActivity.this.getFilesDir().getPath().toString() + "/replays.txt"))) {
+            while(true)
+            {
+                Playback temp = (Playback)replayinput.readObject();
+                System.out.println("Pulled: "+temp.getName());
+                recordList.add(temp);
+            }
+        } catch(EOFException eof)
+        {
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        System.out.println(MainActivity.this.getFilesDir().getPath().toString() + "/replays.txt");
+        try(ObjectOutputStream replays = new ObjectOutputStream(new FileOutputStream(MainActivity.this.getFilesDir().getPath().toString() + "/replays.txt"))) {
+            replays.writeObject(pl);
+            for(Playback p : recordList)
+            {
+                replays.writeObject(p);
+            }
+            System.out.println("Write success.");
+        } catch(Exception e)
+        {
+            System.out.println("Write failed.");
+            e.printStackTrace();
+        }
+    }
+
+    public void saveTheReplay()
+    {
+        //System.out.println("Test");
+        checkReplay = 0;
+        final EditText taskEditText = new EditText(MainActivity.this);
+        AlertDialog thing = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Save Replay")
+                .setMessage("Name your replay.")
+                .setView(taskEditText)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        saveReplay = String.valueOf(taskEditText.getText());
+                        timeReplay = System.currentTimeMillis();
+                        System.out.println("Replay: "+saveReplay+" / Time now is "+System.currentTimeMillis());
+                        finalSaveReplay();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
+    }
+
     /**
      * This method prompts the user if they'd like to save the replay.
      */
     public void gameOver()
     {
+        checkReplay = 0;
         AlertDialog restart = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Game Over")
                 .setMessage("Would you like to save a replay of this game?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        try(ObjectOutputStream replays = new ObjectOutputStream(new FileOutputStream("replays.txt"))) {
-
-                        } catch(EOFException eof)
-                        {
-
-                        } catch(Exception e)
-                        {
-                            e.printStackTrace();
-                        }
+                        saveTheReplay();
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)

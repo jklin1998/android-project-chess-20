@@ -73,10 +73,10 @@
 
     <TextView
         android:id="@+id/text1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="220dp"
-        android:layout_marginBottom="30dp"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="10dp"
         android:contentDescription="@string/playback1"
         android:text="@string/playback1"
         app:layout_constraintBottom_toTopOf="@+id/file2"
@@ -84,10 +84,10 @@
 
     <TextView
         android:id="@+id/text2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="220dp"
-        android:layout_marginBottom="30dp"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="10dp"
         android:contentDescription="@string/playback2"
         android:text="@string/playback2"
         app:layout_constraintBottom_toTopOf="@+id/file3"
@@ -95,10 +95,10 @@
 
     <TextView
         android:id="@+id/text3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="220dp"
-        android:layout_marginBottom="30dp"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="10dp"
         android:contentDescription="@string/playback3"
         android:text="@string/playback3"
         app:layout_constraintBottom_toTopOf="@+id/file4"
@@ -106,10 +106,10 @@
 
     <TextView
         android:id="@+id/text4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="220dp"
-        android:layout_marginBottom="30dp"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="10dp"
         android:contentDescription="@string/playback4"
         android:text="@string/playback4"
         app:layout_constraintBottom_toTopOf="@+id/file5"
@@ -117,10 +117,10 @@
 
     <TextView
         android:id="@+id/text5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="220dp"
-        android:layout_marginBottom="30dp"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="10dp"
         android:contentDescription="@string/playback5"
         android:text="@string/playback5"
         app:layout_constraintBottom_toTopOf="@+id/file6"
@@ -128,10 +128,10 @@
 
     <TextView
         android:id="@+id/text6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="220dp"
-        android:layout_marginBottom="89dp"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="70dp"
         android:contentDescription="@string/playback6"
         android:text="@string/playback6"
         app:layout_constraintBottom_toBottomOf="parent"
