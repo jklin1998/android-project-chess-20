@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     public int checkReplay = 0;
     public long timeReplay = 0;
     public String saveReplay = "";
+    public String drawBackup = "";
     ArrayList<Playback> recordList = new ArrayList<Playback>();
 
     /**
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     {
         //EditText thing = (EditText)findViewById(R.id.sourceInput);
         //thing.setText(feed);
+        System.out.println(feed);
         if(turnCount == 0)
         {
             Button drawButton = (Button)findViewById((R.id.draw_button));
@@ -105,14 +107,15 @@ public class MainActivity extends AppCompatActivity {
             {
                 totalInput = sc.nextLine();
                 EditText sourceText = (EditText)findViewById(R.id.sourceInput);
-                sourceText.setText(phase+": "+totalInput);
+                sourceText.setText(phase+" ("+turnCount+"): "+totalInput);
+                System.out.println(phase+" ("+turnCount+"): "+totalInput);
                 playerLoop();
             } else {
                 playbackMode = false;
                 Button nextMove = (Button)findViewById(R.id.restart_button);
                 nextMove.setText("Restart Game");
                 Button drawButton = (Button)findViewById((R.id.draw_button));
-                drawButton.setText("Draw");;
+                drawButton.setText("Draw");
                 Button aiButton = (Button)findViewById((R.id.button4));
                 aiButton.setText("AI");;
                 Button resignButton = (Button)findViewById(R.id.resign);
@@ -146,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 Playback temp = (Playback)replayinput.readObject();
                 System.out.println("Pulled: "+temp.getName());
                 recordList.add(temp);
+
             }
         } catch(EOFException eof)
         {
@@ -752,34 +756,39 @@ public class MainActivity extends AppCompatActivity {
         } else {
             temp = "Black";
         }
-        AlertDialog restart = new AlertDialog.Builder(MainActivity.this)
-                .setTitle(temp+" has declared a draw")
-                .setMessage(phase+", would you like to call the game a draw?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        totalInput = "draw";
-                        playerLoop();
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        drawButtonBool = false;
-                        isDraw = false;
-                        if(phase.equals("Black"))
-                        {
-                            showErrorMessage(phase+" has denied the Draw request, White's turn.");
-                            phase = "White";
-                        } else {
-                            showErrorMessage(phase+" has denied the Draw request, Black's turn.");
-                            phase = "Black";
+        if(playbackMode)
+        {
+
+        } else {
+            AlertDialog restart = new AlertDialog.Builder(MainActivity.this)
+                    .setTitle(temp+" has declared a draw")
+                    .setMessage(phase+", would you like to call the game a draw?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            totalInput = "draw";
+                            playerLoop();
                         }
-                        //phase = temp;
-                        return;
-                    }
-                })
-                .show();
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            drawButtonBool = false;
+                            isDraw = false;
+                            if(phase.equals("Black"))
+                            {
+                                showErrorMessage(phase+" has denied the Draw request, White's turn.");
+                                phase = "White";
+                            } else {
+                                showErrorMessage(phase+" has denied the Draw request, Black's turn.");
+                                phase = "Black";
+                            }
+                            //phase = temp;
+                            return;
+                        }
+                    })
+                    .show();
+        }
     }
 
     /**
@@ -2086,10 +2095,23 @@ public class MainActivity extends AppCompatActivity {
         }
         while(commandArrList.size() > 0)
         {
+            if(playbackMode && commandArrList.get(0).equals("draw"))
+            {
+                gameEnd = true;
+                showMessage("Game over: Draw");
+                showMessage("Press End Game to return back to Records Menu");
+                Button nextMove = (Button)findViewById(R.id.restart_button);
+                nextMove.setText("End Game");
+                return;
+            }
             if(isDraw && commandArrList.get(0).equals("draw"))
             {
                 gameEnd = true;
                 showErrorMessage("Game over: Draw");
+                playback = playback + "draw\n";
+                //System.out.println("Game over: Draw");
+                System.out.println(playback);
+                gameOver();
                 return;
             }
             if(commandArrList.get(0).equals("undo") && !undoUsed)
@@ -2109,7 +2131,7 @@ public class MainActivity extends AppCompatActivity {
                 EditText sourceText = (EditText)findViewById(R.id.sourceInput);
                 sourceText.setText(phase+": ?? to ??");
                 undoUsed = true;
-                playback = playback + "undo\n";
+                //playback = playback + "undo\n";
                 return;
             }
             if(commandArrList.get(0).equals("resign"))
@@ -2212,7 +2234,10 @@ public class MainActivity extends AppCompatActivity {
         if(!isIllegal)
         {
             showErrorMessage(phase+"'s turn");
-            playback = playback + command + "\n";
+            if(!drawButtonBool)
+            {
+                playback = playback + command + "\n";
+            }
             System.out.println("Playback: "+playback);
             undoUsed = false;
         }
@@ -2261,6 +2286,7 @@ public class MainActivity extends AppCompatActivity {
                 if(drawButtonBool)
                 {
                     totalInput = totalInput + " draw?";
+                    drawBackup = totalInput;
                 }
                 playerLoop();
                 firstInput = "";

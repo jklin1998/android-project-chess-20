@@ -52,6 +52,9 @@ public class RecordActivity extends MainActivity {
         return 0;
     }
 
+    /**
+     * Loads all of the saved games onto the Record Menu. Called whenever the list is sorted by name or date.
+     */
     public void loadEverything()
     {
         TextView pla1 = (TextView)findViewById(R.id.text1);
