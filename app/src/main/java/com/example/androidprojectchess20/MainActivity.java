@@ -22,6 +22,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +48,50 @@ public class MainActivity extends AppCompatActivity {
     public boolean undoUsed = true;
     public boolean kingInCheck = false;
     public boolean drawButtonBool = false;
+    public static boolean playbackMode = false;
+    public static String feed = "";
+    public static int turnCount = 0;
+    Scanner sc;
+
+    public void playbackRecord()
+    {
+        //EditText thing = (EditText)findViewById(R.id.sourceInput);
+        //thing.setText(feed);
+        if(turnCount == 0)
+        {
+            playbackMode = true;
+            resetChessboard();
+            printChessboard();
+            playback = "";
+            phase = "White";
+            drawButtonBool = false;
+            isDraw = false;
+            gameOngoing = false;
+            gameEnd = false;
+            Button nextMove = (Button)findViewById(R.id.restart_button);
+            nextMove.setText("Next Move");
+            sc = new Scanner(feed);
+            EditText sourceText = (EditText)findViewById(R.id.sourceInput);
+            sourceText.setText("Press Next Move");
+            turnCount++;
+        } else {
+            if(sc.hasNextLine())
+            {
+                totalInput = sc.nextLine();
+                EditText sourceText = (EditText)findViewById(R.id.sourceInput);
+                sourceText.setText(phase+": "+totalInput);
+                playerLoop();
+            } else {
+                playbackMode = false;
+                Button nextMove = (Button)findViewById(R.id.restart_button);
+                nextMove.setText("Restart Game");
+                resetChessboard();
+                printChessboard();
+                openRecordActivity();
+            }
+            turnCount++;
+        }
+    }
 
     /**
      * This method resets the entire chessboard and its pieces to their original positions.
@@ -1612,7 +1659,13 @@ public class MainActivity extends AppCompatActivity {
                 showErrorMessage("Black wins");
             } else {
                 System.out.println("White wins");
-                showErrorMessage("Black wins");
+                showErrorMessage("White wins");
+            }
+            if(playbackMode)
+            {
+                showMessage("Press End Game to return back to Records Menu");
+                Button nextMove = (Button)findViewById(R.id.restart_button);
+                nextMove.setText("End Game");
             }
             gameEnd = true;
             return;
@@ -1654,6 +1707,12 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 System.out.println("White wins");
                 gameEnd = true;
+            }
+            if(playbackMode)
+            {
+                showMessage("Press End Game to return back to Records Menu");
+                Button nextMove = (Button)findViewById(R.id.restart_button);
+                nextMove.setText("End Game");
             }
             return;
         }
@@ -1936,12 +1995,18 @@ public class MainActivity extends AppCompatActivity {
                 if(phase.equals("White"))
                 {
                     System.out.println("Black wins");
-                    showErrorMessage("Game over: Black wins");
+                    showMessage("Game over: Black wins");
                     gameEnd = true;
                 } else {
                     System.out.println("White wins");
-                    showErrorMessage("Game over: White wins");
+                    showMessage("Game over: White wins");
                     gameEnd = true;
+                }
+                if(playbackMode)
+                {
+                    showMessage("Press End Game to return back to Records Menu");
+                    Button nextMove = (Button)findViewById(R.id.restart_button);
+                    nextMove.setText("End Game");
                 }
                 playback = playback + command + "\n";
                 System.out.println("Playback: "+playback);
@@ -2006,6 +2071,12 @@ public class MainActivity extends AppCompatActivity {
                         showErrorMessage("Game over: White wins");
                         gameEnd = true;
                     }
+                    if(playbackMode)
+                    {
+                        showMessage("Press End Game to return back to Records Menu");
+                        Button nextMove = (Button)findViewById(R.id.restart_button);
+                        nextMove.setText("End Game");
+                    }
                     playback = playback + command + "\n";
                     System.out.println("Playback: "+playback);
                     return;
@@ -2043,6 +2114,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void chooseMove(String input)
     {
+        if(playbackMode)
+        {
+            return;
+        }
         if(gameEnd)
         {
             showErrorMessage("Game is not in session. Please restart the game.");
@@ -2086,7 +2161,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                setDraw();
+                if(playbackMode)
+                {
+
+                } else {
+                    setDraw();
+                }
             }
         });
 
@@ -2095,29 +2175,39 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                if(!gameOngoing)
+                if(playbackMode)
                 {
-                    System.out.println("Illegal move, try again");
-                    showErrorMessage("Cannot undo on turn 1!");
-                    return;
-                }
-                if(undoUsed)
-                {
-                    System.out.println("Illegal move, try again");
-                    showErrorMessage("Cannot undo further!");
+
                 } else {
-                    totalInput = "undo";
-                    playerLoop();
+                    if(!gameOngoing)
+                    {
+                        System.out.println("Illegal move, try again");
+                        showErrorMessage("Cannot undo on turn 1!");
+                        return;
+                    }
+                    if(undoUsed)
+                    {
+                        System.out.println("Illegal move, try again");
+                        showErrorMessage("Cannot undo further!");
+                    } else {
+                        totalInput = "undo";
+                        playerLoop();
+                    }
                 }
             }
         });
 
-        Button playbackButton = (Button)findViewById(R.id.playback);
+        final Button playbackButton = (Button)findViewById(R.id.playback);
         playbackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {
-                openRecordActivity();
+                if(playbackMode)
+                {
+
+                } else {
+                    openRecordActivity();
+                }
             }
         });
 
@@ -2126,184 +2216,189 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                String kingPiece = "";
-                if(phase.equals("White"))
+                if(playbackMode)
                 {
-                    kingPiece = "wK";
+
                 } else {
-                    kingPiece = "bK";
-                }
-                int xPos = 0;
-                int yPos = 0;
-                for(int i = 0; i < 8; i++)
-                {
-                    for(int j = 0; j < 8; j++)
+                    String kingPiece = "";
+                    if(phase.equals("White"))
                     {
-                        if(chessboard[i][j].equals(kingPiece))
-                        {
-                            xPos = j;
-                            yPos = i;
-                        }
-                    }
-                }
-                if(checkKing(xPos,yPos,phase))
-                {
-                    System.out.println("Illegal move, try again");
-                    showErrorMessage("You're in check!");
-                    return;
-                } else {
-                    firstInput = "";
-                    secondInput = "";
-                    char tempChar = 'a';
-                    if(phase.equals("Black"))
-                    {
-                        tempChar = 'b';
+                        kingPiece = "wK";
                     } else {
-                        tempChar = 'w';
+                        kingPiece = "bK";
                     }
-                    ArrayList<String> phasePieces = new ArrayList<String>();
-                    ArrayList<String> phaseSpots = new ArrayList<String>();
+                    int xPos = 0;
+                    int yPos = 0;
                     for(int i = 0; i < 8; i++)
                     {
                         for(int j = 0; j < 8; j++)
                         {
-                            if(chessboard[j][i].charAt(0) == tempChar)
+                            if(chessboard[i][j].equals(kingPiece))
                             {
-                                String temp = nodenumToCommand(i,j);
-                                phasePieces.add(chessboard[j][i]);
-                                phaseSpots.add(temp);
+                                xPos = j;
+                                yPos = i;
                             }
                         }
                     }
-                    for(int i = 0; i < phasePieces.size(); i++)
+                    if(checkKing(xPos,yPos,phase))
                     {
-                        System.out.print(phasePieces.get(i) + " ");
-                    }
-                    System.out.println();
-                    //String randomPiece = phasePieces.get((int)(Math.random()*phasePieces.size()));
-                    //System.out.println(randomPiece);
-                    do {
-                        int random = (int)(Math.random()*phasePieces.size());
-                        String randomPiece = phasePieces.get(random);
-                        String startPos = "";
+                        System.out.println("Illegal move, try again");
+                        showErrorMessage("You're in check!");
+                        return;
+                    } else {
+                        firstInput = "";
+                        secondInput = "";
+                        char tempChar = 'a';
+                        if(phase.equals("Black"))
+                        {
+                            tempChar = 'b';
+                        } else {
+                            tempChar = 'w';
+                        }
+                        ArrayList<String> phasePieces = new ArrayList<String>();
+                        ArrayList<String> phaseSpots = new ArrayList<String>();
+                        for(int i = 0; i < 8; i++)
+                        {
+                            for(int j = 0; j < 8; j++)
+                            {
+                                if(chessboard[j][i].charAt(0) == tempChar)
+                                {
+                                    String temp = nodenumToCommand(i,j);
+                                    phasePieces.add(chessboard[j][i]);
+                                    phaseSpots.add(temp);
+                                }
+                            }
+                        }
+                        for(int i = 0; i < phasePieces.size(); i++)
+                        {
+                            System.out.print(phasePieces.get(i) + " ");
+                        }
+                        System.out.println();
+                        //String randomPiece = phasePieces.get((int)(Math.random()*phasePieces.size()));
+                        //System.out.println(randomPiece);
+                        do {
+                            int random = (int)(Math.random()*phasePieces.size());
+                            String randomPiece = phasePieces.get(random);
+                            String startPos = "";
                     /*
                     PIECE-BASED AI
                      */
-                        int nodeX = convertCommand(phaseSpots.get(random),1);
-                        int nodeY = convertCommand(phaseSpots.get(random),2);
-                        int destX = 0;
-                        int destY = 0;
-                        System.out.println("Piece: "+randomPiece);
-                        System.out.println("Node X: "+nodeX);
-                        System.out.println("Node Y: "+nodeY);
-                        System.out.println("Final Node: "+nodenumToCommand(nodeX,nodeY));
+                            int nodeX = convertCommand(phaseSpots.get(random),1);
+                            int nodeY = convertCommand(phaseSpots.get(random),2);
+                            int destX = 0;
+                            int destY = 0;
+                            System.out.println("Piece: "+randomPiece);
+                            System.out.println("Node X: "+nodeX);
+                            System.out.println("Node Y: "+nodeY);
+                            System.out.println("Final Node: "+nodenumToCommand(nodeX,nodeY));
 
-                        if(phasePieces.get(random).charAt(1) == 'p') // PAWN
-                        {
-                            int move = 0;
-                            if(phase.equals("Black"))
+                            if(phasePieces.get(random).charAt(1) == 'p') // PAWN
                             {
-                                if(nodeY == 6)
+                                int move = 0;
+                                if(phase.equals("Black"))
                                 {
-                                    move = (int)(Math.random()*2)+1;
+                                    if(nodeY == 6)
+                                    {
+                                        move = (int)(Math.random()*2)+1;
+                                    } else {
+                                        move = 1;
+                                    }
+                                    destX = nodeX;
+                                    destY = nodeY-move;
                                 } else {
-                                    move = 1;
+                                    if(nodeY == 1)
+                                    {
+                                        move = (int)(Math.random()*2)+1;
+                                    } else {
+                                        move = 1;
+                                    }
+                                    destX = nodeX;
+                                    destY = nodeY+move;
                                 }
-                                destX = nodeX;
-                                destY = nodeY-move;
-                            } else {
-                                if(nodeY == 1)
+                            } else if(phasePieces.get(random).charAt(1) == 'R')
+                            {
+                                int mode = (int)(Math.random()*2);
+                                if(mode == 0)
                                 {
-                                    move = (int)(Math.random()*2)+1;
+                                    destX = (int)(Math.random()*8);
+                                    destY = nodeY;
                                 } else {
-                                    move = 1;
+                                    destX = nodeX;
+                                    destY = (int)(Math.random()*8);
                                 }
-                                destX = nodeX;
-                                destY = nodeY+move;
-                            }
-                        } else if(phasePieces.get(random).charAt(1) == 'R')
-                        {
-                            int mode = (int)(Math.random()*2);
-                            if(mode == 0)
+                            } else if(phasePieces.get(random).charAt(1) == 'N')
                             {
-                                destX = (int)(Math.random()*8);
-                                destY = nodeY;
-                            } else {
-                                destX = nodeX;
-                                destY = (int)(Math.random()*8);
-                            }
-                        } else if(phasePieces.get(random).charAt(1) == 'N')
-                        {
-                            int mode = (int)(Math.random()*8);
-                            if(mode == 0)
+                                int mode = (int)(Math.random()*8);
+                                if(mode == 0)
+                                {
+                                    destX = nodeX + 2;
+                                    destY = nodeY + 1;
+                                } else if(mode == 1)
+                                {
+                                    destX = nodeX + 1;
+                                    destY = nodeY + 2;
+                                } else if(mode == 2)
+                                {
+                                    destX = nodeX - 1;
+                                    destY = nodeY + 2;
+                                } else if(mode == 3)
+                                {
+                                    destX = nodeX - 2;
+                                    destY = nodeY + 1;
+                                } else if(mode == 4)
+                                {
+                                    destX = nodeX + 1;
+                                    destY = nodeY - 2;
+                                } else if(mode == 5)
+                                {
+                                    destX = nodeX + 2;
+                                    destY = nodeY - 1;
+                                } else if(mode == 6)
+                                {
+                                    destX = nodeX - 1;
+                                    destY = nodeY - 2;
+                                } else if(mode == 7)
+                                {
+                                    destX = nodeX - 2;
+                                    destY = nodeY - 1;
+                                }
+                            } else if(phasePieces.get(random).charAt(1) == 'B')
                             {
-                                destX = nodeX + 2;
-                                destY = nodeY + 1;
-                            } else if(mode == 1)
-                            {
-                                destX = nodeX + 1;
-                                destY = nodeY + 2;
-                            } else if(mode == 2)
-                            {
-                                destX = nodeX - 1;
-                                destY = nodeY + 2;
-                            } else if(mode == 3)
-                            {
-                                destX = nodeX - 2;
-                                destY = nodeY + 1;
-                            } else if(mode == 4)
-                            {
-                                destX = nodeX + 1;
-                                destY = nodeY - 2;
-                            } else if(mode == 5)
-                            {
-                                destX = nodeX + 2;
-                                destY = nodeY - 1;
-                            } else if(mode == 6)
-                            {
-                                destX = nodeX - 1;
-                                destY = nodeY - 2;
-                            } else if(mode == 7)
-                            {
-                                destX = nodeX - 2;
-                                destY = nodeY - 1;
-                            }
-                        } else if(phasePieces.get(random).charAt(1) == 'B')
-                        {
-                            int rando = (int)(Math.random()*8);
-                            int move = rando-nodeX;
-                            destX = nodeX + move;
-                            destY = nodeY + move;
-                        } else if(phasePieces.get(random).charAt(1) == 'K')
-                        {
-                            int move = (int)(Math.random()*3);
-                            destX = nodeX - 1 + move;
-                            destY = nodeY - 1 + move;
-                        } else if(phasePieces.get(random).charAt(1) == 'Q')
-                        {
-                            int mode = (int)(Math.random()*4);
-                            if(mode == 0)
-                            {
-                                destX = (int)(Math.random()*8);
-                                destY = nodeY;
-                            } else if(mode == 1) {
-                                destX = nodeX;
-                                destY = (int)(Math.random()*8);
-                            } else {
                                 int rando = (int)(Math.random()*8);
                                 int move = rando-nodeX;
                                 destX = nodeX + move;
                                 destY = nodeY + move;
+                            } else if(phasePieces.get(random).charAt(1) == 'K')
+                            {
+                                int move = (int)(Math.random()*3);
+                                destX = nodeX - 1 + move;
+                                destY = nodeY - 1 + move;
+                            } else if(phasePieces.get(random).charAt(1) == 'Q')
+                            {
+                                int mode = (int)(Math.random()*4);
+                                if(mode == 0)
+                                {
+                                    destX = (int)(Math.random()*8);
+                                    destY = nodeY;
+                                } else if(mode == 1) {
+                                    destX = nodeX;
+                                    destY = (int)(Math.random()*8);
+                                } else {
+                                    int rando = (int)(Math.random()*8);
+                                    int move = rando-nodeX;
+                                    destX = nodeX + move;
+                                    destY = nodeY + move;
+                                }
                             }
-                        }
 
-                        //secondInput = letters[(int)(Math.random()*8)]+numbers[(int)(Math.random()*8)];
-                        totalInput = nodenumToCommand(nodeX,nodeY) + " " + nodenumToCommand(destX,destY);
-                        System.out.println(totalInput);
-                        EditText sourceText = (EditText)findViewById(R.id.sourceInput);
-                        sourceText.setText(phase+": "+nodenumToCommand(nodeX,nodeY).toUpperCase() + " to " + nodenumToCommand(destX,destY).toUpperCase());
-                        playerLoop();
-                    } while(isIllegal);
+                            //secondInput = letters[(int)(Math.random()*8)]+numbers[(int)(Math.random()*8)];
+                            totalInput = nodenumToCommand(nodeX,nodeY) + " " + nodenumToCommand(destX,destY);
+                            System.out.println(totalInput);
+                            EditText sourceText = (EditText)findViewById(R.id.sourceInput);
+                            sourceText.setText(phase+": "+nodenumToCommand(nodeX,nodeY).toUpperCase() + " to " + nodenumToCommand(destX,destY).toUpperCase());
+                            playerLoop();
+                        } while(isIllegal);
+                    }
                 }
             }
         });
@@ -2313,14 +2408,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                if(gameEnd)
+                if(playbackMode)
                 {
-                    showErrorMessage("Game is not in session. Please restart the game.");
+
                 } else {
-                    sourceText.setText(phase+": resign");
-                    totalInput = "resign";
-                    System.out.println(totalInput);
-                    playerLoop();
+                    if(gameEnd)
+                    {
+                        showErrorMessage("Game is not in session. Please restart the game.");
+                    } else {
+                        sourceText.setText(phase+": resign");
+                        totalInput = "resign";
+                        System.out.println(totalInput);
+                        playerLoop();
+                    }
                 }
             }
         });
@@ -2330,29 +2430,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                if(gameOngoing)
+                if(playbackMode)
                 {
-                    AlertDialog restart = new AlertDialog.Builder(MainActivity.this)
-                            .setTitle("Restart Game")
-                            .setMessage("Are you sure you want to restart the game?")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    resetChessboard();
-                                    playback = "";
-                                    printChessboard();
-                                    sourceText.setText("White: ?? to ??");
-                                    phase = "White";
-                                    drawButtonBool = false;
-                                    isDraw = false;
-                                    gameOngoing = false;
-                                    gameEnd = false;
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, null)
-                            .show();
+                    playbackRecord();
                 } else {
-                    showErrorMessage("You haven't started a game yet!");
+                    if(gameOngoing)
+                    {
+                        AlertDialog restart = new AlertDialog.Builder(MainActivity.this)
+                                .setTitle("Restart Game")
+                                .setMessage("Are you sure you want to restart the game?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        resetChessboard();
+                                        playback = "";
+                                        printChessboard();
+                                        sourceText.setText("White: ?? to ??");
+                                        phase = "White";
+                                        drawButtonBool = false;
+                                        isDraw = false;
+                                        gameOngoing = false;
+                                        gameEnd = false;
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.no, null)
+                                .show();
+                    } else {
+                        showErrorMessage("You haven't started a game yet!");
+                    }
                 }
             }
         });
@@ -2945,6 +3050,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showErrorMessage(String input)
+    {
+        if(!playbackMode)
+        {
+            Context context = getApplicationContext();
+            CharSequence text = input;
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+    }
+
+    public void showMessage(String input)
     {
         Context context = getApplicationContext();
         CharSequence text = input;

@@ -90,4 +90,7 @@
     <string name="notavail">N/A</string>
     <string name="nextpage">Next\nPage</string>
     <string name="prevpage">Prev\nPage</string>
+    <string name="sort1">Sort by Name</string>
+    <string name="sort2">Sort by Date</string>
+    <string name="close">Back</string>
 </resources>
