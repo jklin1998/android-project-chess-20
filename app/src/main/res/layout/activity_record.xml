@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/file1"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="15dp"
+        android:contentDescription="@string/record1"
+        app:layout_constraintBottom_toTopOf="@+id/file2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:color/holo_orange_light" />
+
+    <ImageView
+        android:id="@+id/file2"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="15dp"
+        android:contentDescription="@string/record2"
+        app:layout_constraintBottom_toTopOf="@+id/file3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:color/holo_orange_dark" />
+
+    <ImageView
+        android:id="@+id/file3"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="15dp"
+        android:contentDescription="@string/record3"
+        app:layout_constraintBottom_toTopOf="@+id/file4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:color/holo_orange_light" />
+
+    <ImageView
+        android:id="@+id/file4"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="15dp"
+        android:contentDescription="@string/record4"
+        app:layout_constraintBottom_toTopOf="@+id/file5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:color/holo_orange_dark" />
+
+    <ImageView
+        android:id="@+id/file5"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="15dp"
+        android:contentDescription="@string/record5"
+        app:layout_constraintBottom_toTopOf="@+id/file6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:color/holo_orange_light" />
+
+    <ImageView
+        android:id="@+id/file6"
+        android:layout_width="280dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="90dp"
+        android:contentDescription="@string/record6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:color/holo_orange_dark" />
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="220dp"
+        android:layout_marginBottom="30dp"
+        android:contentDescription="@string/playback1"
+        android:text="@string/playback1"
+        app:layout_constraintBottom_toTopOf="@+id/file2"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="220dp"
+        android:layout_marginBottom="30dp"
+        android:contentDescription="@string/playback2"
+        android:text="@string/playback2"
+        app:layout_constraintBottom_toTopOf="@+id/file3"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/text3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="220dp"
+        android:layout_marginBottom="30dp"
+        android:contentDescription="@string/playback3"
+        android:text="@string/playback3"
+        app:layout_constraintBottom_toTopOf="@+id/file4"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/text4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="220dp"
+        android:layout_marginBottom="30dp"
+        android:contentDescription="@string/playback4"
+        android:text="@string/playback4"
+        app:layout_constraintBottom_toTopOf="@+id/file5"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/text5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="220dp"
+        android:layout_marginBottom="30dp"
+        android:contentDescription="@string/playback5"
+        android:text="@string/playback5"
+        app:layout_constraintBottom_toTopOf="@+id/file6"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/text6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="220dp"
+        android:layout_marginBottom="105dp"
+        android:contentDescription="@string/playback6"
+        android:text="@string/playback6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/next_page"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/nextpage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/prev_page"
+        android:layout_width="0dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="276dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/prevpage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

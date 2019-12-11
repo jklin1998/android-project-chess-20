@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Android Project Chess20</string>
     <string name="undo_button">undo</string>
-    <string name="restart_button">restart\ngame</string>
+    <string name="restart_button">Restart Game</string>
+    <string name="playback">Replay Records</string>
     <string name="draw_game">draw</string>
     <string name="resign_game">resign</string>
     <string name="AI_button">AI</string>
@@ -71,7 +72,22 @@
     <string name="h6">h6</string>
     <string name="h7">h7</string>
     <string name="h8">h8</string>
+    <string name="playback1">Playback 1: N/A</string>
+    <string name="playback2">Playback 2: N/A</string>
+    <string name="playback3">Playback 3: N/A</string>
+    <string name="playback4">Playback 4: N/A</string>
+    <string name="playback5">Playback 5: N/A</string>
+    <string name="playback6">Playback 6: N/A</string>
+    <string name="record1">record1</string>
+    <string name="record2">record2</string>
+    <string name="record3">record3</string>
+    <string name="record4">record4</string>
+    <string name="record5">record5</string>
+    <string name="record6">record6</string>
     <string name="finish">finish</string>
     <string name="src">src</string>
     <string name="start">Start</string>
+    <string name="notavail">N/A</string>
+    <string name="nextpage">Next\nPage</string>
+    <string name="prevpage">Prev\nPage</string>
 </resources>

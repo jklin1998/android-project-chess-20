@@ -610,11 +610,21 @@
 
     <Button
         android:id="@+id/restart_button"
-        android:layout_width="0dp"
-        android:layout_height="54dp"
-        android:layout_marginEnd="150dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="145dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="68dp"
         android:text="@string/restart_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/playback"
+        android:layout_width="145dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/playback"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -654,7 +664,7 @@
         android:layout_width="145dp"
         android:layout_height="47dp"
         android:layout_marginEnd="120dp"
-        android:layout_marginBottom="84dp"
+        android:layout_marginBottom="122dp"
         android:clickable="false"
         android:cursorVisible="false"
         android:focusable="false"
