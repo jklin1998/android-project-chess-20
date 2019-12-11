@@ -21,6 +21,11 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Timer;
@@ -33,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     String secondInput = "";
     String totalInput = "";
     String playback = "";
+    String backupPlayback = "";
 
     /*
     PORTED CODE
@@ -53,12 +59,23 @@ public class MainActivity extends AppCompatActivity {
     public static int turnCount = 0;
     Scanner sc;
 
+    /**
+     * This method is responsible for playing past games.
+     */
     public void playbackRecord()
     {
         //EditText thing = (EditText)findViewById(R.id.sourceInput);
         //thing.setText(feed);
         if(turnCount == 0)
         {
+            Button drawButton = (Button)findViewById((R.id.draw_button));
+            drawButton.setText(" ");;
+            Button aiButton = (Button)findViewById((R.id.button4));
+            aiButton.setText(" ");;
+            Button resignButton = (Button)findViewById(R.id.resign);
+            resignButton.setText(" ");
+            Button undoButton = (Button)findViewById((R.id.undo_button));
+            undoButton.setText(" ");
             playbackMode = true;
             resetChessboard();
             printChessboard();
@@ -85,12 +102,55 @@ public class MainActivity extends AppCompatActivity {
                 playbackMode = false;
                 Button nextMove = (Button)findViewById(R.id.restart_button);
                 nextMove.setText("Restart Game");
+                Button drawButton = (Button)findViewById((R.id.draw_button));
+                drawButton.setText("Draw");;
+                Button aiButton = (Button)findViewById((R.id.button4));
+                aiButton.setText("AI");;
+                Button resignButton = (Button)findViewById(R.id.resign);
+                resignButton.setText("Resign");
+                Button undoButton = (Button)findViewById((R.id.undo_button));
+                undoButton.setText("Undo");
+
                 resetChessboard();
                 printChessboard();
+                playback = "";
+                EditText sourceText = (EditText)findViewById(R.id.sourceInput);
+                sourceText.setText("White: ?? to ??");
+                phase = "White";
+                drawButtonBool = false;
+                isDraw = false;
+                gameOngoing = false;
+                gameEnd = false;
                 openRecordActivity();
             }
             turnCount++;
         }
+    }
+
+    /**
+     * This method prompts the user if they'd like to save the replay.
+     */
+    public void gameOver()
+    {
+        AlertDialog restart = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Game Over")
+                .setMessage("Would you like to save a replay of this game?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try(ObjectOutputStream replays = new ObjectOutputStream(new FileOutputStream("replays.txt"))) {
+
+                        } catch(EOFException eof)
+                        {
+
+                        } catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .show();
     }
 
     /**
@@ -179,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
                 backupChessboard[i][j] = chessboard[i][j];
             }
         }
+        backupPlayback = playback;
     }
 
     /**
@@ -193,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
                 chessboard[i][j] = backupChessboard[i][j];
             }
         }
+        playback = backupPlayback;
     }
 
     /**
@@ -1661,13 +1723,15 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("White wins");
                 showErrorMessage("White wins");
             }
+            gameEnd = true;
             if(playbackMode)
             {
                 showMessage("Press End Game to return back to Records Menu");
                 Button nextMove = (Button)findViewById(R.id.restart_button);
                 nextMove.setText("End Game");
+            } else {
+                gameOver();
             }
-            gameEnd = true;
             return;
         }
         if(checkKing(xPos,yPos,phase))
@@ -1713,6 +1777,8 @@ public class MainActivity extends AppCompatActivity {
                 showMessage("Press End Game to return back to Records Menu");
                 Button nextMove = (Button)findViewById(R.id.restart_button);
                 nextMove.setText("End Game");
+            } else {
+                gameOver();
             }
             return;
         }
@@ -2002,14 +2068,16 @@ public class MainActivity extends AppCompatActivity {
                     showMessage("Game over: White wins");
                     gameEnd = true;
                 }
+                playback = playback + command + "\n";
+                System.out.println("Playback: "+playback);
                 if(playbackMode)
                 {
                     showMessage("Press End Game to return back to Records Menu");
                     Button nextMove = (Button)findViewById(R.id.restart_button);
                     nextMove.setText("End Game");
+                } else {
+                    gameOver();
                 }
-                playback = playback + command + "\n";
-                System.out.println("Playback: "+playback);
                 return;
             }
             isIllegal = false;
@@ -2071,14 +2139,16 @@ public class MainActivity extends AppCompatActivity {
                         showErrorMessage("Game over: White wins");
                         gameEnd = true;
                     }
+                    playback = playback + command + "\n";
+                    System.out.println("Playback: "+playback);
                     if(playbackMode)
                     {
                         showMessage("Press End Game to return back to Records Menu");
                         Button nextMove = (Button)findViewById(R.id.restart_button);
                         nextMove.setText("End Game");
+                    } else {
+                        gameOver();
                     }
-                    playback = playback + command + "\n";
-                    System.out.println("Playback: "+playback);
                     return;
                 }
             }
@@ -2204,7 +2274,39 @@ public class MainActivity extends AppCompatActivity {
             {
                 if(playbackMode)
                 {
+                    AlertDialog restart = new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Exit")
+                            .setMessage("A game is currently being played. Would you like to exit?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    playbackMode = false;
+                                    Button nextMove = (Button)findViewById(R.id.restart_button);
+                                    nextMove.setText("Restart Game");
+                                    Button drawButton = (Button)findViewById((R.id.draw_button));
+                                    drawButton.setText("Draw");;
+                                    Button aiButton = (Button)findViewById((R.id.button4));
+                                    aiButton.setText("AI");;
+                                    Button resignButton = (Button)findViewById(R.id.resign);
+                                    resignButton.setText("Resign");
+                                    Button undoButton = (Button)findViewById((R.id.undo_button));
+                                    undoButton.setText("Undo");
 
+                                    resetChessboard();
+                                    printChessboard();
+                                    playback = "";
+                                    EditText sourceText = (EditText)findViewById(R.id.sourceInput);
+                                    sourceText.setText("White: ?? to ??");
+                                    phase = "White";
+                                    drawButtonBool = false;
+                                    isDraw = false;
+                                    gameOngoing = false;
+                                    gameEnd = false;
+                                    openRecordActivity();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .show();
                 } else {
                     openRecordActivity();
                 }
