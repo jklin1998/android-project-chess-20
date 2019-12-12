@@ -14,9 +14,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -28,6 +30,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -65,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
     public int enpassantDeathY = 8;
     public boolean isEnpassant = false;
     public boolean enpassantKill = false;
+    public String extraArg = "";
+    public String superArg = "";
 
     /*
     SAVE REPLAYS
@@ -1847,6 +1852,7 @@ public class MainActivity extends AppCompatActivity {
     public void makeYourMove(String arg1, String arg2)
     {
         copyChessboard();
+        extraArg = "";
         undoUsed = true;
         String kingPiece = "";
         if(phase.equals("White"))
@@ -2088,11 +2094,32 @@ public class MainActivity extends AppCompatActivity {
             castleMoves[3] = 1;
         }
         // PROMOTION
+        boolean isPromo = false;
+        String promotedTemp = "";
+        Spinner promotionSpin = (Spinner) findViewById(R.id.promotion);
+        if(playbackMode)
+        {
+            promotedTemp = extraArg;
+        } else {
+            promotedTemp = String.valueOf(promotionSpin.getSelectedItem());
+        }
+        if(promotedTemp.equals("Bishop"))
+        {
+            thirdArg = "B";
+        } else if(promotedTemp.equals("Rook"))
+        {
+            thirdArg = "R";
+        } else if(promotedTemp.equals("Knight"))
+        {
+            thirdArg = "N";
+        } else {
+            thirdArg = "Q";
+        }
         if(chessboard[y2Node][x2Node].equals("wp") && y2Node == 0)
         {
-            if(thirdArg.equals("K"))
+            if(thirdArg.equals("B"))
             {
-                chessboard[y2Node][x2Node] = "wK";
+                chessboard[y2Node][x2Node] = "wB";
             } else if(thirdArg.equals("N"))
             {
                 chessboard[y2Node][x2Node] = "wN";
@@ -2102,12 +2129,13 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 chessboard[y2Node][x2Node] = "wQ";
             }
+            isPromo = true;
         }
-        if(chessboard[y2Node][x2Node].equals("bp") && y2Node == 0)
+        if(chessboard[y2Node][x2Node].equals("bp") && y2Node == 7)
         {
-            if(thirdArg.equals("K"))
+            if(thirdArg.equals("B"))
             {
-                chessboard[y2Node][x2Node] = "bK";
+                chessboard[y2Node][x2Node] = "bB";
             } else if(thirdArg.equals("N"))
             {
                 chessboard[y2Node][x2Node] = "bN";
@@ -2117,6 +2145,13 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 chessboard[y2Node][x2Node] = "bQ";
             }
+            isPromo = true;
+        }
+        if(isPromo)
+        {
+            superArg = " "+thirdArg;
+        } else {
+            superArg = "";
         }
         System.out.println();
         if(checkKing(xPos,yPos,phase))
@@ -2188,6 +2223,15 @@ public class MainActivity extends AppCompatActivity {
             {
                 System.out.println("Stalemate");
                 System.out.println("draw");
+                gameEnd = true;
+                if(playbackMode)
+                {
+                    showMessage("Press End Game to return back to Records Menu");
+                    Button nextMove = (Button)findViewById(R.id.restart_button);
+                    nextMove.setText("End Game");
+                } else {
+                    gameOver();
+                }
                 return;
             }
         }
@@ -2217,6 +2261,17 @@ public class MainActivity extends AppCompatActivity {
         for(String s : commandArr)
         {
             commandArrList.add(s);
+        }
+        if(commandArrList.size() > 2)
+        {
+            if(commandArrList.get(2).length() == 1)
+            {
+                extraArg = commandArrList.get(2);
+            } else {
+                extraArg = "";
+            }
+        } else {
+            extraArg = "";
         }
         while(commandArrList.size() > 0)
         {
@@ -2361,7 +2416,7 @@ public class MainActivity extends AppCompatActivity {
             showErrorMessage(phase+"'s turn");
             if(!drawButtonBool)
             {
-                playback = playback + command + "\n";
+                playback = playback + command + superArg + "\n";
             }
             System.out.println("Playback: "+playback);
             undoUsed = false;
@@ -2774,6 +2829,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        Spinner promoSpin = (Spinner)findViewById(R.id.promotion);
+        List<String> list = new ArrayList<String>();
+        list.add("Queen");
+        list.add("Rook");
+        list.add("Knight");
+        list.add("Bishop");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        promoSpin.setAdapter(dataAdapter);
 
         ImageView nodeA1 = (ImageView)findViewById(R.id.a1);
         ImageView nodeA2 = (ImageView)findViewById(R.id.a2);

@@ -659,6 +659,25 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/promotionStr"
+        android:layout_width="170dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="154dp"
+        android:layout_marginBottom="476dp"
+        android:text="@string/promotionText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Spinner
+        android:id="@+id/promotion"
+        android:layout_width="88dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="54dp"
+        android:layout_marginBottom="476dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/sourceInput"
         android:layout_width="145dp"
