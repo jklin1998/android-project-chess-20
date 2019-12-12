@@ -1,3 +1,7 @@
+/**
+ * @author Group 20: Jonathan Lin (jkl130) & Jason Cariaga (jmc803)
+ * @version 1.0
+ */
 package com.example.androidprojectchess20;
 
 import java.io.Serializable;

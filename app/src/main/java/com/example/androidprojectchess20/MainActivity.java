@@ -154,6 +154,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method takes the game that ended and saves it locally.
+     */
     public void finalSaveReplay()
     {
         Playback pl = new Playback(saveReplay,timeReplay,playback);
@@ -163,8 +166,10 @@ public class MainActivity extends AppCompatActivity {
             {
                 Playback temp = (Playback)replayinput.readObject();
                 System.out.println("Pulled: "+temp.getName());
-                recordList.add(temp);
-
+                if(temp.getName().equals(pl.getName()))
+                {
+                    recordList.add(temp);
+                }
             }
         } catch(EOFException eof)
         {
@@ -187,6 +192,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method asks for the name of the game that finished. Inputting a name will allow the game to be saved.
+     */
     public void saveTheReplay()
     {
         //System.out.println("Test");
@@ -194,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText taskEditText = new EditText(MainActivity.this);
         AlertDialog thing = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Save Replay")
-                .setMessage("Name your replay.")
+                .setMessage("Name your replay. Note that names that are the same as existing saved games will be overwritten.")
                 .setView(taskEditText)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override

@@ -1,3 +1,7 @@
+/**
+ * @author Group 20: Jonathan Lin (jkl130) & Jason Cariaga (jmc803)
+ * @version 1.0
+ */
 package com.example.androidprojectchess20;
 
 import android.app.Dialog;
@@ -28,6 +32,11 @@ public class RecordActivity extends MainActivity {
     ArrayList<Playback> playlist = new ArrayList<Playback>();
     ArrayList<String> playlistNames = new ArrayList<String>();
 
+    /**
+     * Depending on the game's given name, this function will return the entire playback of the recorded game.
+     * @param filename The input is the name of the recorded game.
+     * @return
+     */
     public String searchGetFeed(String filename)
     {
         for(Playback play : playlist)
@@ -40,6 +49,11 @@ public class RecordActivity extends MainActivity {
         return "N/A";
     }
 
+    /**
+     * Depending on the game's given name, this function will return the date when the game was recorded.
+     * @param filename The input is the name of the recorded game.
+     * @return
+     */
     public long searchGetDate(String filename)
     {
         for(Playback play : playlist)
