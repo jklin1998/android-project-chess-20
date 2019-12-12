@@ -59,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
     public static String feed = "";
     public static int turnCount = 0;
     Scanner sc;
+    public int enpassantX = 8;
+    public int enpassantY = 8;
+    public int enpassantDeathX = 8;
+    public int enpassantDeathY = 8;
+    public boolean isEnpassant = false;
+    public boolean enpassantKill = false;
 
     /*
     SAVE REPLAYS
@@ -96,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
             isDraw = false;
             gameOngoing = false;
             gameEnd = false;
+            isEnpassant = false;
+            enpassantKill = false;
             Button nextMove = (Button)findViewById(R.id.restart_button);
             nextMove.setText("Next Move");
             sc = new Scanner(feed);
@@ -133,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
                 isDraw = false;
                 gameOngoing = false;
                 gameEnd = false;
+                isEnpassant = false;
+                enpassantKill = false;
                 openRecordActivity();
             }
             turnCount++;
@@ -811,10 +821,11 @@ public class MainActivity extends AppCompatActivity {
             {
                 if(y1Node == 6)
                 {
-                    if((y1Node - y2Node) == 2)
+                    if((y1Node - y2Node) == 2) // WHITE PAWN ADVANCING
                     {
                         if(chessboard[y1Node-1][x1Node].equals("  ") && chessboard[y1Node-2][x1Node].equals("  "))
                         {
+                            isEnpassant = true;
                             return true;
                         } else {
                             return false;
@@ -822,6 +833,7 @@ public class MainActivity extends AppCompatActivity {
                     } else if(y1Node - y2Node == 1) {
                         if(chessboard[y1Node-1][x1Node].equals("  "))
                         {
+                            isEnpassant = false;
                             return true;
                         } else {
                             return false;
@@ -833,6 +845,7 @@ public class MainActivity extends AppCompatActivity {
                     if(y1Node - y2Node == 1) {
                         if(chessboard[y1Node-1][x1Node].equals("  "))
                         {
+                            isEnpassant = false;
                             return true;
                         } else {
                             return false;
@@ -844,9 +857,26 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 if((x1Node - 1) == x2Node || (x1Node + 1) == x2Node)
                 {
-                    if((y1Node - 1) == y2Node && !chessboard[y2Node][x2Node].equals("  "))
+                    if((y1Node - 1) == y2Node)
                     {
-                        return true;
+                        if(!chessboard[y2Node][x2Node].equals("  "))
+                        {
+                            isEnpassant = false;
+                            return true;
+                        } else if(chessboard[y2Node][x2Node].equals("  ") && enpassantY < 8 && enpassantX < 8)
+                        {
+                            //System.out.println("x1 = "+x1Node+", y1 = "+y1Node+", x2 = "+x2Node+", y2 = "+y2Node);
+                            if(y2Node == enpassantY && x2Node == enpassantX && chessboard[enpassantY+1][enpassantX].equals("bp")) // SUCCESSFUL EN PASSANT
+                            {
+                                isEnpassant = false;
+                                enpassantKill = true;
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            return false;
+                        }
                     } else {
                         return false;
                     }
@@ -860,10 +890,11 @@ public class MainActivity extends AppCompatActivity {
             {
                 if(y1Node == 1)
                 {
-                    if((y2Node - y1Node) == 2)
+                    if((y2Node - y1Node) == 2) // BLACK PAWN ADVANCING
                     {
                         if(chessboard[y1Node+1][x1Node].equals("  ") && chessboard[y1Node+2][x1Node].equals("  "))
                         {
+                            isEnpassant = true;
                             return true;
                         } else {
                             return false;
@@ -871,6 +902,7 @@ public class MainActivity extends AppCompatActivity {
                     } else if(y2Node - y1Node == 1) {
                         if(chessboard[y1Node+1][x1Node].equals("  "))
                         {
+                            isEnpassant = false;
                             return true;
                         } else {
                             return false;
@@ -882,6 +914,7 @@ public class MainActivity extends AppCompatActivity {
                     if(y2Node - y1Node == 1) {
                         if(chessboard[y1Node+1][x1Node].equals("  "))
                         {
+                            isEnpassant = false;
                             return true;
                         } else {
                             return false;
@@ -893,15 +926,58 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 if((x1Node - 1) == x2Node || (x1Node + 1) == x2Node)
                 {
-                    if((y1Node + 1) == y2Node && !chessboard[y2Node][x2Node].equals("  "))
+                    if((y1Node + 1) == y2Node)
                     {
-                        return true;
+                        if(!chessboard[y2Node][x2Node].equals("  "))
+                        {
+                            isEnpassant = false;
+                            return true;
+                        } else if(chessboard[y2Node][x2Node].equals("  ") && enpassantY < 8 && enpassantX < 8)
+                        {
+                            if(y2Node == enpassantY && x2Node == enpassantX && chessboard[enpassantY-1][enpassantX].equals("wp")) // SUCCESSFUL EN PASSANT
+                            {
+                                isEnpassant = false;
+                                enpassantKill = true;
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            return false;
+                        }
                     } else {
                         return false;
                     }
                 } else {
                     return false;
                 }
+                /*
+                if((x1Node - 1) == x2Node || (x1Node + 1) == x2Node)
+                {
+                    if((y1Node - 1) == y2Node)
+                    {
+                        if(!chessboard[y2Node][x2Node].equals("  "))
+                        {
+                            isEnpassant = false;
+                            return true;
+                        } else if(chessboard[y2Node][x2Node].equals("  ") && isEnpassant && enpassantY < 8 && enpassantX < 8)
+                        {
+                            if(chessboard[enpassantY][enpassantX].equals("bp"))
+                            {
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            return false;
+                        }
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+                 */
             }
         } else if(src.charAt(1) == 'R') // BLACK & WHITE ROOK
         {
@@ -923,6 +999,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if(temp2 - temp1 == 1)
                 {
+                    isEnpassant = false;
                     return true;
                 } else {
                     for(int i = temp1+1; i < temp2; i++)
@@ -932,6 +1009,7 @@ public class MainActivity extends AppCompatActivity {
                             return false;
                         }
                     }
+                    isEnpassant = false;
                     return true;
                 }
             } else if (y1Node == y2Node)
@@ -948,6 +1026,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if(temp2 - temp1 == 1)
                 {
+                    isEnpassant = false;
                     return true;
                 } else {
                     for(int i = temp1+1; i < temp2; i++)
@@ -957,6 +1036,7 @@ public class MainActivity extends AppCompatActivity {
                             return false;
                         }
                     }
+                    isEnpassant = false;
                     return true;
                 }
             } else {
@@ -1049,6 +1129,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 return false;
             }
+            isEnpassant = false;
             return true;
         } else if(src.charAt(1) == 'N') // BLACK & WHITE KNIGHT
         {
@@ -1096,6 +1177,7 @@ public class MainActivity extends AppCompatActivity {
             {
                 return false;
             }
+            isEnpassant = false;
             return true;
         } else if(src.charAt(1) == 'Q') // BLACK & WHITE QUEEN
         {
@@ -1117,6 +1199,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if(temp2 - temp1 == 1)
                 {
+                    isEnpassant = false;
                     return true;
                 } else {
                     for(int i = temp1+1; i < temp2; i++)
@@ -1126,6 +1209,7 @@ public class MainActivity extends AppCompatActivity {
                             return false;
                         }
                     }
+                    isEnpassant = false;
                     return true;
                 }
             } else if (y1Node == y2Node)
@@ -1142,6 +1226,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if(temp2 - temp1 == 1)
                 {
+                    isEnpassant = false;
                     return true;
                 } else {
                     for(int i = temp1+1; i < temp2; i++)
@@ -1151,6 +1236,7 @@ public class MainActivity extends AppCompatActivity {
                             return false;
                         }
                     }
+                    isEnpassant = false;
                     return true;
                 }
             } else {
@@ -1240,6 +1326,7 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
             }
+            isEnpassant = false;
             return true;
         } else if(src.charAt(1) == 'K') // BLACK & WHITE KING
         {
@@ -1274,6 +1361,7 @@ public class MainActivity extends AppCompatActivity {
                         chessboard[7][0] = "  ";
                         castleMoves[0] = 1;
                         castleMoves[1] = 1;
+                        isEnpassant = false;
                         return true;
                     } else if(x1Node - x2Node == -2 && castleMoves[0] == 0 && castleMoves[2] == 0)
                     {
@@ -1296,6 +1384,7 @@ public class MainActivity extends AppCompatActivity {
                         chessboard[7][7] = "  ";
                         castleMoves[0] = 1;
                         castleMoves[2] = 1;
+                        isEnpassant = false;
                         return true;
                     }
                 } else if(phase.equals("Black")) // BLACK KING CASTLING
@@ -1320,6 +1409,7 @@ public class MainActivity extends AppCompatActivity {
                         chessboard[0][0] = "  ";
                         castleMoves[3] = 1;
                         castleMoves[4] = 1;
+                        isEnpassant = false;
                         return true;
                     } else if(x1Node - x2Node == -2 && castleMoves[3] == 0 && castleMoves[5] == 0)
                     {
@@ -1341,6 +1431,7 @@ public class MainActivity extends AppCompatActivity {
                         chessboard[0][7] = "  ";
                         castleMoves[3] = 1;
                         castleMoves[5] = 1;
+                        isEnpassant = false;
                         return true;
                     }
                 }
@@ -1352,6 +1443,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         }
+        isEnpassant = false;
         return true;
     }
 
@@ -1892,6 +1984,9 @@ public class MainActivity extends AppCompatActivity {
         int y2Node = convertCommand(arg2,2);
         //System.out.println(chessboard[y1Node][x1Node]);
         //System.out.println(chessboard[y2Node][x2Node]);
+        System.out.println("MOVE FROM, X = "+x1Node+", Y = "+y1Node);
+        System.out.println("MOVE TO, X = "+x2Node+", Y = "+y2Node);
+        System.out.println("ENPASSANT, X = "+enpassantX+", Y = "+enpassantY);
         String src = "";
         String dest = "";
         if(x1Node == -1 || x2Node == -1 || y1Node == -1 || y2Node == -1)
@@ -1939,11 +2034,26 @@ public class MainActivity extends AppCompatActivity {
         } else {
             phaseAdder = 6;
         }
+        enpassantKill = false;
         if(checkLegality(x1Node,y1Node,x2Node,y2Node))
         {
             //System.out.println("This is a legal move.");
             chessboard[y2Node][x2Node] = src;
             chessboard[y1Node][x1Node] = "  ";
+            if(enpassantX < 8 && enpassantY < 8)
+            {
+                if(!isEnpassant && chessboard[enpassantY+1][enpassantX].equals("bp") && phase.equals("White") && enpassantKill)
+                {
+                    chessboard[enpassantY+1][enpassantX] = "  ";
+                    enpassantKill = false;
+                }
+                if(!isEnpassant && chessboard[enpassantY-1][enpassantX].equals("wp") && phase.equals("Black") && enpassantKill)
+                {
+                    chessboard[enpassantY-1][enpassantX] = "  ";
+                    enpassantKill = false;
+                }
+            }
+
         } else {
 
             System.out.println("Illegal move, try again");
@@ -2018,6 +2128,21 @@ public class MainActivity extends AppCompatActivity {
             printChessboard();
             return;
         }
+        if(isEnpassant)
+        {
+            enpassantX = x2Node;
+            enpassantY = y2Node;
+            if(phase.equals("White"))
+            {
+                enpassantY++;
+            } else {
+                enpassantY--;
+            }
+        } else {
+            enpassantX = 8;
+            enpassantY = 8;
+        }
+        System.out.println("ENPASSANT, X = "+enpassantX+", Y = "+enpassantY);
         printChessboard();
         /*
         CHECK FOR OPPONENT'S CHECK
@@ -2384,6 +2509,8 @@ public class MainActivity extends AppCompatActivity {
                                     isDraw = false;
                                     gameOngoing = false;
                                     gameEnd = false;
+                                    isEnpassant = false;
+                                    enpassantKill = false;
                                     openRecordActivity();
                                 }
                             })
@@ -2635,6 +2762,8 @@ public class MainActivity extends AppCompatActivity {
                                         isDraw = false;
                                         gameOngoing = false;
                                         gameEnd = false;
+                                        isEnpassant = false;
+                                        enpassantKill = false;
                                     }
                                 })
                                 .setNegativeButton(android.R.string.no, null)
