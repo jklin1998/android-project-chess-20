@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -24,8 +25,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
@@ -2483,6 +2486,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    public void playMusic()
+    {
+        final MediaPlayer player;
+        player = MediaPlayer.create(this,R.raw.gym);
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp)
+            {
+                player.release();
+                playMusic();
+            }
+        });
+        player.start();
+    }
+
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -2490,6 +2511,7 @@ public class MainActivity extends AppCompatActivity {
         resetChessboard();
         copyChessboard();
         printChessboard();
+        //playMusic();
         /*
         printChessboard();
         playerLoop();
